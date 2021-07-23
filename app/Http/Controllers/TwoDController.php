@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\D2d;
+use App\Models\DtwoD;
 
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class TwoDController extends Controller
      */
     public function index()
     {
-        return D2d::all();
+        return DtwoD::all();
     }
 
     /**
@@ -27,12 +27,14 @@ class TwoDController extends Controller
     {
         $request->validate([
             '2D' => 'required',
+            'modern' => 'required',
+            'internet' => 'required',
             'time' => 'required',
             'date' =>'required',
             'day' =>'required'
 
         ]);
-        return D2d::create($request->all());  
+        return DtwoD::create($request->all());  
     }
 
     /**
@@ -43,7 +45,7 @@ class TwoDController extends Controller
      */
     public function show($id)
     {
-       return D2d::find($id);
+       return DtwoD::find($id);
     }
 
     /**
@@ -55,7 +57,7 @@ class TwoDController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $twod = D2d::find($id);
+        $twod = DtwoD::find($id);
         $twod->update($request->all());
         return $twod;
     }
@@ -68,6 +70,6 @@ class TwoDController extends Controller
      */
     public function destroy($id)
     {
-        return D2d::destroy($id);
+        return DtwoD::destroy($id);
     }
 }
