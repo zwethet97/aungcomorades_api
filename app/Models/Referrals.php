@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class 2D extends Model
+class Referrals extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'referral-code',
+        'submitted-userId'
+    ];
 }
