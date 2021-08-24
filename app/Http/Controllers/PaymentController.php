@@ -67,4 +67,8 @@ class PaymentController extends Controller
     {
         return PaymentInfo::destroy($id);
     }
+    public function search($name)
+    {
+        return PaymentInfo::where('userId', 'like', '%'.$name.'%')->get();
+    }
 }

@@ -32,7 +32,8 @@ class TransactionController extends Controller
             'userId' => 'required',
             'platform' => 'required',
             'accountnumber' => 'required',
-            'amount' => 'required'
+            'amount' => 'required',
+            'screen-shot' => 'required'
         ]);
 
         $deposit = Transaction::create([
@@ -42,7 +43,8 @@ class TransactionController extends Controller
             'accountnumber' => $fields['accountnumber'],
             'status' => 'deposit',
             'amount' => $fields['amount'],
-            'transferuserId' => '-'
+            'transferuserId' => '-',
+            'screen-shot' => $fields['screen-shot']
         ]);
 
         $changeamount = Bettors::find($fields['userId']);
@@ -84,7 +86,8 @@ class TransactionController extends Controller
             'accountnumber' => $fields['accountnumber'],
             'status' => 'withdraw',
             'amount' => $fields['amount'],
-            'transferuserId' => '-'
+            'transferuserId' => '-',
+            'screen-shot' => '-'
         ]);
         
         return response($withdraw, 201);
@@ -132,7 +135,8 @@ class TransactionController extends Controller
             'accountnumber' => '-',
             'status' => 'transfer',
             'amount' => $fields['amount'],
-            'transferuserId' => $fields['transferuserId']
+            'transferuserId' => $fields['transferuserId'],
+            'screen-shot' => '-'
         ]);
 
         return response($transfer, 201);
@@ -176,5 +180,13 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         return Transaction::destroy($id);
+    }
+    public function search($name)
+    {
+        return Transaction::where('userId', 'like', '%'.$name.'%')->get();
+    }
+    public function searchtransferUserPhone($name)
+    {
+        return Transaction::where('transferuserId', 'like', '%'.$name.'%')->get();
     }
 }

@@ -57,9 +57,14 @@ class BetslipController extends Controller
                 'amount' => $betinteger['amount'],
                 'bet-slip-id' => $betslip->id
             ]);
+        }
 
-            return response($betinteger,201);
-        } 
+        $response = [
+            'betslip' => $betslip,
+            'bets' => $betintegers
+        ];
+        
+        return response($response,201);
     }
 
     /**
@@ -96,5 +101,10 @@ class BetslipController extends Controller
     public function destroy($id)
     {
         return BetSlip::destroy($id);
+    }
+    
+    public function search($name)
+    {
+        return Bettors::where('userId', 'like', '%'.$name.'%')->get();
     }
 }

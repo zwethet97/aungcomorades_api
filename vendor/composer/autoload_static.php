@@ -534,6 +534,7 @@ class ComposerStaticInit22936e171a8e34e74828ebb692f93d01
         'App\\Models\\PaymentInfo' => __DIR__ . '/../..' . '/app/Models/PaymentInfo.php',
         'App\\Models\\Products' => __DIR__ . '/../..' . '/app/Models/Products.php',
         'App\\Models\\Referrals' => __DIR__ . '/../..' . '/app/Models/Referrals.php',
+        'App\\Models\\ThaithreeD' => __DIR__ . '/../..' . '/app/Models/ThaithreeD.php',
         'App\\Models\\Transaction' => __DIR__ . '/../..' . '/app/Models/Transaction.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

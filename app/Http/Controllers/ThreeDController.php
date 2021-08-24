@@ -75,4 +75,9 @@ class ThreeDController extends Controller
     {
         return DthreeD::destroy($id);
     }
+
+    public function search($name)
+    {
+        return DthreeD::where('date', 'like', '%'.$name.'%')->get();
+    }
 }

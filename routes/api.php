@@ -33,11 +33,11 @@ Route::post('/login', [AuthController::class, 'login']);
 // Route::get('/products/{id}', [ProductController::class, 'show']);
 // Route::get('/products/search/{name}', [ProductController::class, 'search']);
 Route::get('/dtwod', [TwoDController::class, 'index']);
-Route::get('/dtwod/{date}', [TwoDController::class, 'show']);
-Route::get('/dtwod/search/{name}', [TwoDController::class, 'search']);
+Route::get('/dtwod/{id}', [TwoDController::class, 'show']);
+Route::get('/dtwod/search/{date}', [TwoDController::class, 'search']);
 Route::get('/dthree', [ThreeDController::class, 'index']);
-Route::get('/dthree/{date}', [ThreeDController::class, 'show']);
-Route::get('/dthree/search/{name}', [ThreeDController::class, 'search']);
+Route::get('/dthree/{id}', [ThreeDController::class, 'show']);
+Route::get('/dthree/search/{date}', [ThreeDController::class, 'search']);
 
 
 // Route::get('/products', [ProductController::class, 'index']);
@@ -58,16 +58,21 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/normal-user', [UserAuthController::class, 'store']);
     Route::get('/transaction', [TransactionController::class, 'index']);
+    Route::get('/transaction/search/{userid}', [TransactionController::class, 'search']);
+    Route::get('/transfer/{phone}', [TransactionController::class, 'searchtransferUserPhone']);
     Route::post('/deposit', [TransactionController::class, 'deposit']);
     Route::post('/withdraw', [TransactionController::class, 'withdraw']);
     Route::post('/transfer', [TransactionController::class, 'transfer']);
     Route::post('/paymentinfo', [PaymentController::class, 'store']);
+    Route::get('/paymentinfo/search/{name}', [PaymentController::class, 'search']);
     Route::post('/betslip', [BetslipController::class, 'store']);
     Route::get('/betslip', [BetslipController::class, 'index']);
+    Route::get('/betslip/search/{userid}', [BetslipController::class, 'index']);
     Route::post('/referral', [ReferralController::class, 'store']);
     Route::get('/referral', [ReferralController::class, 'index']);
-    Route::get('/normal-user', [UserAuthController::class, 'index']);   
-
+    Route::get('/normal-user', [UserAuthController::class, 'index']);
+    Route::get('/normal-user/search/{referral}', [UserAuthController::class, 'searchReferral']);
+    Route::get('/normal-user/{phone}', [UserAuthController::class, 'searchPhone']);   
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

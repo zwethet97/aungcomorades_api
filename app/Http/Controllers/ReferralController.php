@@ -35,6 +35,8 @@ class ReferralController extends Controller
 
         $checkreferral = Bettors::where('referral-code', $fields['referral-code'])->first();
         $checksubmitted = Bettors::where('id', $fields['submitted-userId'])->value('referral-code');
+        $referralrole = Bettors::where('referral-code', $fields['referral-code'])->value('user-level');
+        $referralrolecount = Referrals::where('referral-code', $fields['referral-code'])->count();
 
         if( !$checkreferral || $checksubmitted == $fields['referral-code'] ){
             return response([
@@ -42,12 +44,40 @@ class ReferralController extends Controller
             ], 401);
         }
 
-        
+        if ( $referralrole == 'silver' || $referralrolecount >= 10 )
+        {
+            $checkreferral->update([
+                'user-level' => 'gold'
+            ]);
+        }
+
+        if ( $referralrole == 'gold' || $referralrolecount >= 30 )
+        {
+            $checkreferral->update([
+                'user-level' => 'diamond'
+            ]);
+        }
+
+        if ( $referralrole == 'diamond' || $referralrolecount >= 50 )
+        {
+            $checkreferral->update([
+                'user-level' => 'jade'
+            ]);
+        }
+
+        if ( $referralrole == '' || $referralrolecount >= 100 )
+        {
+            $checkreferral->update([
+                'user-level' => 'ruby'
+            ]);
+        }
+
         $referral = Referrals::create([
             'referral-code' => $fields['referral-code'],
             'submitted-userId' => $fields['submitted-userId']
         ]);
 
+        
 
 
         return response($referral, 201);
@@ -85,5 +115,9 @@ class ReferralController extends Controller
     public function destroy($id)
     {
         
+    }
+    public function search($name)
+    {
+        return Referrals::where('submitted-userId', 'like', '%'.$name.'%')->get();
     }
 }

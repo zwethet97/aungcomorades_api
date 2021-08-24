@@ -52,7 +52,7 @@ class UserAuthController extends Controller
             'password' => $fields['password'],
             'profile-pic-source' => 'https://cdn.pixabay.com/photo/2017/06/13/12/53/profile-2398782_960_720.png',
             'user-level' => 'normal',
-            'referral-code' => $str2,
+            'referral-code' => $this->generateRandomString(6),
             'credits' => '0000' 
          ]);
 
@@ -94,5 +94,16 @@ class UserAuthController extends Controller
     public function destroy($id)
     {
         return Bettors::destroy($id);
+    }
+
+    
+    public function searchReferral($name)
+    {
+        return Bettors::where('referral-code', 'like', '%'.$name.'%')->get();
+    }
+
+    public function searchPhone($name)
+    {
+        return Bettors::where('phone-number', 'like', '%'.$name.'%')->get();
     }
 }

@@ -72,4 +72,9 @@ class TwoDController extends Controller
     {
         return DtwoD::destroy($id);
     }
+
+    public function search($name)
+    {
+        return DtwoD::where('date', 'like', '%'.$name.'%')->get();
+    }
 }
