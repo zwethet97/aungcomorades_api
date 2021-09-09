@@ -28,7 +28,12 @@ class PaymentController extends Controller
             'accountnumber' => 'required',
             'userId' => 'required'
         ]);
-        return PaymentInfo::create($request->all());     
+
+        return response([ 
+            'success' => true,
+            'message' => 'Data Created',
+            'data' => PaymentInfo::all()
+        ],201);    
     }
     
 
@@ -40,7 +45,12 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        return PaymentInfo::find($id);
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => PaymentInfo::find($id)
+        ],200);  
+        
     }
 
     /**
@@ -54,7 +64,11 @@ class PaymentController extends Controller
     {
         $payment = PaymentInfo::find($id);
         $payment->update($request->all());
-        return $payment;
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => $payment
+        ],200);  
     }
 
     /**
@@ -65,10 +79,18 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
-        return PaymentInfo::destroy($id);
+        return response([ 
+            'success' => true,
+            'message' => 'Data Deleted',
+            'data' => PaymentInfo::destroy($id)
+        ],203);  
     }
     public function search($name)
-    {
-        return PaymentInfo::where('userId', 'like', '%'.$name.'%')->get();
+    { 
+        return response([ 
+            'success' => true,
+            'message' => 'UserID Payment Found',
+            'data' => PaymentInfo::where('userId', 'like', '%'.$name.'%')->get()
+        ],203);  
     }
 }

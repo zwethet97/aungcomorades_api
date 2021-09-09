@@ -33,13 +33,16 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response([
+            'success' => true,
+            'message' => 'Successfully Register',
+            'data' => $response
+        ], 201);
 
     }
 
     public function login(Request $request){
         $fields = $request->validate([
-
             'email' => 'required|string',
             'password' => 'required|string'
         ]);
@@ -48,6 +51,7 @@ class AuthController extends Controller
 
         if( !$user || !Hash::check($fields['password'], $user->password)){
             return response([
+                'success' => false,
                 'message' => 'Bad creds'
             ], 401);
         }
@@ -59,7 +63,11 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response([
+            'success' => true,
+            'message' => 'Successfully Log In',
+            'data' => $response
+        ], 201);
 
     }
 

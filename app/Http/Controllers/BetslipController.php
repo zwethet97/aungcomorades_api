@@ -16,7 +16,12 @@ class BetslipController extends Controller
      */
     public function index()
     {
-        return BetSlip::all();
+        return response([
+            'success' => true,
+            'data' => 'Data Found Successfully',
+            'message' => BetSlip::all()
+        ],200);
+        
     }
 
     /**
@@ -64,7 +69,11 @@ class BetslipController extends Controller
             'bets' => $betintegers
         ];
         
-        return response($response,201);
+        return response([
+            'success' => true,
+            'data' => 'Data Created Successfully',
+            'message' => $response
+        ],201);
     }
 
     /**
@@ -89,7 +98,11 @@ class BetslipController extends Controller
     {
         $bet = BetSlip::find($id);
         $bet->update($request->all());
-        return $user;
+        return response([
+            'success' => true,
+            'data' => 'Data Updated Successfully',
+            'message' => $bet
+        ],200);
     }
 
     /**
@@ -101,10 +114,15 @@ class BetslipController extends Controller
     public function destroy($id)
     {
         return BetSlip::destroy($id);
+        
     }
     
     public function search($name)
     {
-        return Bettors::where('userId', 'like', '%'.$name.'%')->get();
+        return response([
+            'success' => true,
+            'data' => 'UserID Payment Data Found Successfully',
+            'message' => Bettors::where('userId', 'like', '%'.$name.'%')->get()
+        ],200);
     }
 }

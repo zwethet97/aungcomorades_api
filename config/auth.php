@@ -43,7 +43,28 @@ return [
 
         'api' => [
             'driver' => 'token',
+            'provider' => 'bettors',
+            'hash' => false,
+        ],
+
+        'users' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
+        ],
+
+        'bettors' => [
+            'driver' => 'sanctum',
+            'provider' => 'bettors',
+        ],
+
+        'bettors' => [
+            'driver' => 'session',
+            'provider' => 'bettors',
+        ],
+
+        'admin-api' => [
+            'driver' => 'token',
+            'provider' => 'admins',
             'hash' => false,
         ],
     ],
@@ -71,10 +92,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'bettors' => [
+             'driver' => 'eloquent',
+             'table' => App\Models\NormalUser::class,
+         ],
     ],
 
     /*
@@ -95,6 +116,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

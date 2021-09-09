@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateThaithreeDSTable extends Migration
+class CreateBannerInfosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateThaithreeDSTable extends Migration
      */
     public function up()
     {
-        Schema::create('thaithree_d_s', function (Blueprint $table) {
+        Schema::create('banner_infos', function (Blueprint $table) {
             $table->id();
+            $table->string('banner_image');
+            $table->string('title');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateThaithreeDSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('thaithree_d_s');
+        Schema::dropIfExists('banner_infos');
     }
 }

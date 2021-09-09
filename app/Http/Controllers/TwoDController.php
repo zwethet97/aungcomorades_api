@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\DtwoD;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,11 @@ class TwoDController extends Controller
      */
     public function index()
     {
-        return DtwoD::all();
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => DtwoD::all()
+        ],200);
     }
 
     /**
@@ -34,7 +39,11 @@ class TwoDController extends Controller
             'day' =>'required'
 
         ]);
-        return DtwoD::create($request->all());  
+        return response([
+            'success' => true,
+            'message' => 'Data Created',
+            'data' => DtwoD::create($request->all())
+        ],201); ; 
     }
 
     /**
@@ -45,7 +54,11 @@ class TwoDController extends Controller
      */
     public function show($id)
     {
-       return DtwoD::find($id);
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => DtwoD::find($id)
+        ],200); 
     }
 
     /**
@@ -57,9 +70,13 @@ class TwoDController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $twod = DtwoD::find($id);
-        $twod->update($request->all());
-        return $twod;
+        $threed = DtwoD::find($id);
+        $threed->update($request->all());
+        return response([
+            'success' => true,
+            'message' => 'Data Updated',
+            'data' => $threed
+        ],200); 
     }
 
     /**
@@ -70,11 +87,20 @@ class TwoDController extends Controller
      */
     public function destroy($id)
     {
-        return DtwoD::destroy($id);
+        return response([
+            'success' => true,
+            'message' => 'Data Deleted Successfully',
+            'data' => DtwoD::destroy($id)
+        ],203); 
     }
 
     public function search($name)
     {
-        return DtwoD::where('date', 'like', '%'.$name.'%')->get();
+        return response([
+            'success' => true,
+            'message' => 'Data Deleted Successfully',
+            'data' => DtwoD::where('date', 'like', '%'.$name.'%')->get()
+        ],203); 
+        
     }
 }

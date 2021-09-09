@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Referrals;
 use Illuminate\Http\Response;
-use App\Models\Bettors;
+use App\Models\NormalUser;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +16,11 @@ class ReferralController extends Controller
      */
     public function index()
     {
-        return Referrals::all();
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => Referrals::all()
+        ],200);
     }
 
     /**
@@ -33,14 +37,18 @@ class ReferralController extends Controller
             'submitted-userId' => 'required|string|unique:referrals,submitted-userId'
         ]);
 
-        $checkreferral = Bettors::where('referral-code', $fields['referral-code'])->first();
-        $checksubmitted = Bettors::where('id', $fields['submitted-userId'])->value('referral-code');
-        $referralrole = Bettors::where('referral-code', $fields['referral-code'])->value('user-level');
+        $checkreferral = NormalUser::where('referral-code', $fields['referral-code'])->first();
+        $checksubmitted = NormalUser::where('id', $fields['submitted-userId'])->value('referral-code');
+        $referralrole = NormalUser::where('referral-code', $fields['referral-code'])->value('user-level');
         $referralrolecount = Referrals::where('referral-code', $fields['referral-code'])->count();
 
         if( !$checkreferral || $checksubmitted == $fields['referral-code'] ){
+
+        
             return response([
-                'message' => 'Bad creds'
+                'success'  => false,
+                'message' => "Referrals already exist or you can't submit your own referral code",
+                'data' => ''
             ], 401);
         }
 
@@ -77,10 +85,11 @@ class ReferralController extends Controller
             'submitted-userId' => $fields['submitted-userId']
         ]);
 
-        
-
-
-        return response($referral, 201);
+        return response([
+            'success' => true,
+            'message' => 'Data Created',
+            'data' => $referral
+        ],201);
     }
 
     /**
@@ -118,6 +127,10 @@ class ReferralController extends Controller
     }
     public function search($name)
     {
-        return Referrals::where('submitted-userId', 'like', '%'.$name.'%')->get();
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => Referrals::where('submitted-userId', 'like', '%'.$name.'%')->get()
+        ],200);
     }
 }

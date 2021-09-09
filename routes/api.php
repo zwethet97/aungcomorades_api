@@ -9,6 +9,7 @@ use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BetSlipController;
+use App\Http\Controllers\BetCheckController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,17 +28,25 @@ use Illuminate\Support\Facades\Route;
 
 // Route::resource('products', ProductController::class);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [UserAuthController::class, 'register']);
+Route::post('/verify', [UserAuthController::class, 'verifyOTP']);
+Route::post('/login', [UserAuthController::class, 'login']);
 // Route::get('/products', [ProductController::class, 'index']);
 // Route::get('/products/{id}', [ProductController::class, 'show']);
 // Route::get('/products/search/{name}', [ProductController::class, 'search']);
 Route::get('/dtwod', [TwoDController::class, 'index']);
 Route::get('/dtwod/{id}', [TwoDController::class, 'show']);
 Route::get('/dtwod/search/{date}', [TwoDController::class, 'search']);
-Route::get('/dthree', [ThreeDController::class, 'index']);
-Route::get('/dthree/{id}', [ThreeDController::class, 'show']);
-Route::get('/dthree/search/{date}', [ThreeDController::class, 'search']);
+Route::get('/dthreed', [ThreeDController::class, 'index']);
+Route::get('/dthreed/{id}', [ThreeDController::class, 'show']);
+Route::get('/dthreed/search/{date}', [ThreeDController::class, 'search']);
+Route::get('/thaithreed', [ThaiThreeDController::class, 'index']);
+Route::get('/thaithreed/{id}', [ThaiThreeDController::class, 'show']);
+Route::get('/thaithreed/search/{date}', [ThaiThreeDController::class, 'search']);
+Route::get('/info', [BannerInfoController::class, 'index']);
+Route::post('/info', [BannerInfoController::class, 'store']);
+Route::get('/check', [BetCheckController::class, 'checkBet']);
+
 
 
 // Route::get('/products', [ProductController::class, 'index']);
@@ -55,8 +64,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/dthreed', [ThreeDController::class, 'store']);
     Route::put('/dthreed/{id}', [ThreeDController::class, 'update']);
     Route::delete('/dthreed/{id}', [ThreeDController::class, 'destroy']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/normal-user', [UserAuthController::class, 'store']);
+    Route::post('/thaithreed', [ThaiThreeDController::class, 'store']);
+    Route::put('/thaithreed/{id}', [ThaiThreeDController::class, 'update']);
+    Route::delete('/thaithreed/{id}', [ThaiThreeDController::class, 'destroy']);
+    Route::post('/logout', [UserAuthController::class, 'logout']);
+    //Route::post('/normal-user', [UserAuthController::class, 'store']);
     Route::get('/transaction', [TransactionController::class, 'index']);
     Route::get('/transaction/search/{userid}', [TransactionController::class, 'search']);
     Route::get('/transfer/{phone}', [TransactionController::class, 'searchtransferUserPhone']);

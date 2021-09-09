@@ -15,7 +15,11 @@ class ThreeDController extends Controller
      */
     public function index()
     {
-        return DthreeD::all();
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => DthreeD::all()
+        ],200);
     }
 
     /**
@@ -27,7 +31,7 @@ class ThreeDController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            '3D' => 'required',
+            '2D' => 'required',
             'modern' => 'required',
             'internet' => 'required',
             'set' => 'required',
@@ -37,7 +41,11 @@ class ThreeDController extends Controller
             'day' =>'required'
 
         ]);
-        return DthreeD::create($request->all()); 
+        return response([
+            'success' => true,
+            'message' => 'Data Created',
+            'data' => DthreeD::create($request->all())
+        ],201); ; 
     }
 
     /**
@@ -48,7 +56,11 @@ class ThreeDController extends Controller
      */
     public function show($id)
     {
-        return DthreeD::find($id);
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => DthreeD::find($id)
+        ],200); 
     }
 
     /**
@@ -62,7 +74,11 @@ class ThreeDController extends Controller
     {
         $threed = DthreeD::find($id);
         $threed->update($request->all());
-        return $threed;
+        return response([
+            'success' => true,
+            'message' => 'Data Updated',
+            'data' => $threed
+        ],200); 
     }
 
     /**
@@ -73,11 +89,20 @@ class ThreeDController extends Controller
      */
     public function destroy($id)
     {
-        return DthreeD::destroy($id);
+        return response([
+            'success' => true,
+            'message' => 'Data Deleted Successfully',
+            'data' => DthreeD::destroy($id)
+        ],203); 
     }
 
     public function search($name)
     {
-        return DthreeD::where('date', 'like', '%'.$name.'%')->get();
+        return response([
+            'success' => true,
+            'message' => 'Data Deleted Successfully',
+            'data' => DthreeD::where('date', 'like', '%'.$name.'%')->get()
+        ],203); 
+        
     }
 }

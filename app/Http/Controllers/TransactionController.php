@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Transaction;
-use App\Models\Bettors;
+use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -47,7 +47,7 @@ class TransactionController extends Controller
             'screen-shot' => $fields['screen-shot']
         ]);
 
-        $changeamount = Bettors::find($fields['userId']);
+        $changeamount = NormalUser::find($fields['userId']);
         $existingamount = $changeamount->credits;
         $changeamount->update([
             'credits' => $existingamount + $fields['amount']
@@ -66,7 +66,7 @@ class TransactionController extends Controller
             'amount' => 'required'
         ]);
 
-        $changeamount = Bettors::find($fields['userId']);
+        $changeamount = NormalUser::find($fields['userId']);
         $existingamount = $changeamount->credits;
 
         if( $existingamount < $fields['amount']){
@@ -102,7 +102,7 @@ class TransactionController extends Controller
             'transferuserId' => 'required'
         ]);
 
-        $changeamount = Bettors::find($fields['userId']);
+        $changeamount = NormalUser::find($fields['userId']);
         $existingamount = $changeamount->credits;
         
         if( $existingamount < $fields['amount']){
@@ -115,7 +115,7 @@ class TransactionController extends Controller
             'credits' => $existingamount - $fields['amount']
         ]);
         
-        $transferUser = Bettors::where('phone-number', $fields['transferuserId'])->first();
+        $transferUser = NormalUser::where('phone-number', $fields['transferuserId'])->first();
 
         if($transferUser->id == $fields['userId']){
             return response([
