@@ -31,7 +31,7 @@ class ThreeDController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            '2D' => 'required',
+            '3D' => 'required',
             'modern' => 'required',
             'internet' => 'required',
             'set' => 'required',
@@ -45,7 +45,7 @@ class ThreeDController extends Controller
             'success' => true,
             'message' => 'Data Created',
             'data' => DthreeD::create($request->all())
-        ],201); ; 
+        ],201); 
     }
 
     /**

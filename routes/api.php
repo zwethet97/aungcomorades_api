@@ -4,12 +4,15 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoDController;
 use App\Http\Controllers\ThreeDController;
+use App\Http\Controllers\ThaiThreeDController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BetSlipController;
 use App\Http\Controllers\BetCheckController;
+use App\Http\Controllers\BannerInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +46,8 @@ Route::get('/dthreed/search/{date}', [ThreeDController::class, 'search']);
 Route::get('/thaithreed', [ThaiThreeDController::class, 'index']);
 Route::get('/thaithreed/{id}', [ThaiThreeDController::class, 'show']);
 Route::get('/thaithreed/search/{date}', [ThaiThreeDController::class, 'search']);
-Route::get('/info', [BannerInfoController::class, 'index']);
-Route::post('/info', [BannerInfoController::class, 'store']);
+Route::get('/info', [BannerController::class, 'index']);
+Route::post('/info', [BannerController::class, 'store']);
 Route::get('/check', [BetCheckController::class, 'checkBet']);
 
 
