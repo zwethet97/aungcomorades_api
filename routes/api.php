@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserAuthController::class, 'register']);
 Route::post('/verify', [UserAuthController::class, 'verifyOTP']);
 Route::post('/login', [UserAuthController::class, 'login']);
+Route::post('/reset', [UserAuthController::class, 'resetPassword']);
+Route::post('/final-reset', [UserAuthController::class, 'verifyOTPreset']);
 // Route::get('/products', [ProductController::class, 'index']);
 // Route::get('/products/{id}', [ProductController::class, 'show']);
 // Route::get('/products/search/{name}', [ProductController::class, 'search']);
@@ -88,6 +90,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/normal-user', [UserAuthController::class, 'index']);
     Route::get('/normal-user/search/{referral}', [UserAuthController::class, 'searchReferral']);
     Route::get('/normal-user/{phone}', [UserAuthController::class, 'searchPhone']);   
+Route::post('/profile/{id}', [UserAuthController::class, 'update']);
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

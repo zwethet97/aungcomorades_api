@@ -45,8 +45,44 @@ class UserAuthController extends Controller
 
         ]);
 
+        $verify = NormalUser::where('phone-number',$fields['phone-number'])->first();
+
+        if ($verify)
+        {
+            if ($verify['verified_otp'] == 1)
+            {
+                return response([
+                    'success' => false,
+                    'message' => 'Phone Number is already registered',
+                    'data' => []
+                ],401);
+            }
+        }
+
         $otp = rand(100000, 999999);
+        $otpstring = strval($otp);
         $str2 = substr($fields['phone-number'], 4);
+
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      $fields['phone-number'],
+            "message"   =>      "Your OTP is " . $otpstring ,
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
 
         $user = NormalUser::create([
 
@@ -61,10 +97,15 @@ class UserAuthController extends Controller
             'otp' => strval($otp)
          ]);
 
+         $fullresult = [
+             'user' => $user,
+            'smspoh' => $result
+         ];
+
          return response([
              'success' => true,
              'message' => 'Create User Successfully',
-             'data' => $user
+             'data' => $fullresult
          ],201);
     }
 
@@ -159,10 +200,101 @@ class UserAuthController extends Controller
                 'success' => true,
                 'message' => 'Login Successfully',
                 'data' => $user
-            ], 401);
+            ], 201);
         }
     }
 
+    public function resetPassword(Request $request){
+
+        $fields = $request->validate([
+            'phone-number' => 'required'
+        ]);
+
+        $resetphone = NormalUser::where('phone-number',$fields['phone-number'])->first();
+
+        if(!$resetphone || $resetphone['verified_otp'] == 0)
+        {
+            return response([
+                'success'=> false,
+                'message'=> 'Phone Number does not exit',
+                'data' => []
+            ],400);
+        }
+
+        $otp = rand(100000, 999999);
+        $otpstring = strval($otp);
+
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      $fields['phone-number'],
+            "message"   =>      "Your OTP is " . $otpstring ,
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+        
+        $resetphone->update([
+            'otp'  => $otpstring
+        ]);
+
+        return response([
+            'success'=> false,
+            'message'=> 'OTP is already sent for Password Reset',
+            'data' => []
+        ], 201);
+    }
+
+    public function verifyOTPreset(Request $request){
+
+        $fields = $request->validate([
+            'phone-number' => 'required|string',
+            'otp' => 'required|string',
+            'password' => 'required|string|confirmed|max:6'
+        ]);
+
+        $verifyphone = NormalUser::where('phone-number', $fields['phone-number'])->first();
+        
+        if (!$verifyphone)
+        {
+            return response([
+                'success'=> false,
+                'message'=> 'Phone Number does not exit',
+                'data' => []
+            ],400); 
+        }
+
+        if ($verifyphone->otp != $fields['otp'])
+        {
+            return response([
+                'success'=> false,
+                'message'=> 'OTP is not correct',
+                'data' => []
+            ],400);
+        }
+
+        $verifyphone->update([
+            'password' => bcrypt($fields['password'])
+        ]);
+
+        return response([
+                'success'=> true,
+                'message'=> 'Password resets successfully',
+                'data' => []
+            ],201);
+        
+    }
 
     /**
      * Display the specified resource.
@@ -181,11 +313,23 @@ class UserAuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function update(Request $request, $id)
-    {
+    {   
+        $fields = $request->validate([
+            'username' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+
+        ]);
+        $imageName = time().'.'.$request->image->extension();  
+     
+        $request->image->move(public_path('profileImages'), $imageName);
+
         $user = NormalUser::find($id);
-        $user->update($request->all());
+        $user->update([
+            'username' => $fields['username'],
+            'profile-pic-source' => $imageName
+        ]);
         return $user;
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 
-class BetslipController extends Controller
+class BetSlipController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,19 @@ class BetslipController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        $betslips = BetSlip::all();
+        foreach ( $betslips as $betslip ){
+            
+        }
+
         return response([
             'success' => true,
             'data' => 'Data Found Successfully',
-            'message' => BetSlip::all()
+            'message' => $betslip
         ],200);
+
+        
         
     }
 

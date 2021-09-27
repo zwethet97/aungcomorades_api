@@ -97,12 +97,22 @@ class ThreeDController extends Controller
     }
 
     public function search($name)
-    {
+    {   
+        $dated = DthreeD::where('date', 'like', '%'.$name.'%')->get();
+        if (!DthreeD::where('date', 'like', '%'.$name.'%')->first()) 
+        {
+            return response([
+                'success' => false,
+                'message' => 'Date Not Found',
+                'data' => []
+            ],401);
+        }
+
         return response([
             'success' => true,
-            'message' => 'Data Deleted Successfully',
-            'data' => DthreeD::where('date', 'like', '%'.$name.'%')->get()
-        ],203); 
+            'message' => 'Date Found',
+            'data' => $dated
+        ],200);
         
     }
 }

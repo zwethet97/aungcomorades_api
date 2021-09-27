@@ -33,8 +33,11 @@ class TransactionController extends Controller
             'platform' => 'required',
             'accountnumber' => 'required',
             'amount' => 'required',
-            'screen-shot' => 'required'
+            'screenshot' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+        $imageName = time().'.'.$request->screenshot->extension();  
+     
+        $request->screenshot->move(public_path('screenShotImages'), $imageName);
 
         $deposit = Transaction::create([
 
@@ -44,7 +47,7 @@ class TransactionController extends Controller
             'status' => 'deposit',
             'amount' => $fields['amount'],
             'transferuserId' => '-',
-            'screen-shot' => $fields['screen-shot']
+            'screen-shot' => $imageName
         ]);
 
         $changeamount = NormalUser::find($fields['userId']);
@@ -53,7 +56,11 @@ class TransactionController extends Controller
             'credits' => $existingamount + $fields['amount']
         ]);
         
-        return response($deposit, 201);
+        return response([ 
+            'success' => true,
+            'message' => 'Deposit Successfully! Alert Admin for Credits',
+            'data' => $deposit
+        ], 201);
     }
 
     public function withdraw(Request $request)
@@ -71,7 +78,9 @@ class TransactionController extends Controller
 
         if( $existingamount < $fields['amount']){
             return response([
-                'message' => 'Not Enough Credits'
+                'success' => false,
+                'message' => 'Not Enough Credits',
+                'data' => []
             ], 401);
         }
 
@@ -90,7 +99,11 @@ class TransactionController extends Controller
             'screen-shot' => '-'
         ]);
         
-        return response($withdraw, 201);
+        return response([ 
+            'success' => true,
+            'message' => 'Withdrawl Successfully',
+            'data' => $withdraw
+        ], 201);
     }
 
     public function transfer(Request $request)
@@ -107,7 +120,9 @@ class TransactionController extends Controller
         
         if( $existingamount < $fields['amount']){
             return response([
-                'message' => 'Not Enough Credits'
+                'success' => false,
+                'message' => 'Not Enough Credits',
+                'data' => []
             ], 401);
         }
 
@@ -119,7 +134,9 @@ class TransactionController extends Controller
 
         if($transferUser->id == $fields['userId']){
             return response([
-                'message' => "You can't transfer to your main account"
+                'success' => false,
+                'message' => "You can't transfer to your account",
+                'data' => []
             ], 401);
         }
 
@@ -139,12 +156,13 @@ class TransactionController extends Controller
             'screen-shot' => '-'
         ]);
 
-        return response($transfer, 201);
-        
+        return response([ 
+            'success' => true,
+            'message' => 'Transfer Successfully',
+            'data' => $transfer
+        ], 201);    
     }
-
     
-
     /**
      * Display the specified resource.
      *
@@ -183,10 +201,18 @@ class TransactionController extends Controller
     }
     public function search($name)
     {
-        return Transaction::where('userId', 'like', '%'.$name.'%')->get();
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => Transaction::where('userId', 'like', '%'.$name.'%')->get()
+        ], 200);
     }
     public function searchtransferUserPhone($name)
     {
-        return Transaction::where('transferuserId', 'like', '%'.$name.'%')->get();
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => Transaction::where('transferuserId', 'like', '%'.$name.'%')->get()
+        ], 200);
     }
 }

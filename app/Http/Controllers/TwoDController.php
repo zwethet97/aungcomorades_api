@@ -95,12 +95,22 @@ class TwoDController extends Controller
     }
 
     public function search($name)
-    {
+    {   
+        $dated = DtwoD::where('date', 'like', '%'.$name.'%')->get();
+        if (!DtwoD::where('date', 'like', '%'.$name.'%')->first()) 
+        {
+            return response([
+                'success' => false,
+                'message' => 'Date Not Found',
+                'data' => []
+            ],401);
+        }
+
         return response([
             'success' => true,
-            'message' => 'Data Deleted Successfully',
-            'data' => DtwoD::where('date', 'like', '%'.$name.'%')->get()
-        ],203); 
+            'message' => 'Date Found',
+            'data' => $dated
+        ],200);
         
     }
 }

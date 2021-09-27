@@ -8,41 +8,27 @@ use App\Models\DtwoD;
 use App\Models\DthreeD;
 use App\Models\ThaiThreeD;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BetCheckController extends Controller
 {
     public function checkBet()
     {
-        $Bets = BetInteger::all();
-        $WinNumber = DtwoD::all();
-        
-        foreach ( $WinNumber as $WinNumbers )
-        {   
-            $Win = BetInteger::where('integer', $WinNumbers['2D'])->exists();
-           if ( $Win )
-           {    
-               $slip = BetInteger::where('integer', $WinNumbers['2D'])->first();   
-                $WinBetSlip = BetSlip::where('id',$slip->id)->first();
+        $twod = DB::table('bet_integers')
+                ->join('dtwo_d_s', 'bet_integers.integer','=', 'dtwo_d_s.2D')
+                ->select('bet_integers.integer','bet_integers.amount','bet_integers.bet-slip-id')
+                ->get();
 
-                return $WinBetSlip;
+        $decodes = json_decode($twod,true);
 
-               if ( $WinBetSlip->forDate == $WinNumbers['date'] || $WinBetSlip->forTime == $WinNumbers['time'] )
-               {
-                    return true;
-                    // $WinBetSlip->update([
-                    //     'status' => 'win'
-                    // ]);
-                    // $WinUser = NormalUser::where('id',$WinBetSlip->userId)->first();
-                    // $UpdateAmount = $Win->amount * 8;
-                    // $WinUser->update([
-                    //     'amount' => $WinUser->amount + $UpdateAmount
-                    // ]);
-                    // return response([
-                    //     'message' => 'Changed Successfully'
-                    // ],200);
-               }
-           }
+        foreach ( $decodes as $decode )
+        {
+            BetSlip::where('id',$decode['bet-slip-id'])->update([
+                'status' => 'winning'
+            ]);
         }
         
+        return true;
     }
+
 }

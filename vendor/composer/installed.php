@@ -503,12 +503,12 @@
             ),
         ),
         'nesbot/carbon' => array(
-            'pretty_version' => '2.50.0',
-            'version' => '2.50.0.0',
+            'pretty_version' => '2.53.1',
+            'version' => '2.53.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../nesbot/carbon',
             'aliases' => array(),
-            'reference' => 'f47f17d17602b2243414a44ad53d9f8b9ada5fdb',
+            'reference' => 'f4655858a784988f880c1b8c7feabbf02dfdf045',
             'dev_requirement' => false,
         ),
         'nikic/php-parser' => array(
