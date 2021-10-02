@@ -5,6 +5,8 @@ use App\Models\BetSlip;
 use App\Models\BetInteger;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+
 
 
 class BetSlipController extends Controller
@@ -16,19 +18,28 @@ class BetSlipController extends Controller
      */
     public function index()
     {   
-        $betslips = BetSlip::all();
-        foreach ( $betslips as $betslip ){
-            
-        }
+        return response([
+            'success' => true,
+            'data' => 'Betslips Found Successfully',
+            'message' => BetSlip::all()
+        ],201);
+    }
+
+    public function betDetail($id)
+    {
+        $betslip = BetSlip::where('id',$id)->first();
+        $betNo = BetInteger::where('bet-slip-id',$id)->get();
+
+        $betDetail = [
+            'betslip' => $betslip,
+            'betIntegerAmount' => $betNo
+        ];
 
         return response([
             'success' => true,
-            'data' => 'Data Found Successfully',
-            'message' => $betslip
-        ],200);
-
-        
-        
+            'data' => 'ID with Betslip found successfully',
+            'message' => $betDetail
+        ],201);
     }
 
     /**

@@ -11,6 +11,7 @@ class PaymentInfo extends Model
     protected $fillable = [
         'userId',
         'accountnumber',
-        'platform'
+        'platform',
+        'username'
     ];
 }

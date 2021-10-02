@@ -15,7 +15,11 @@ class BannerController extends Controller
      */
     public function index()
     {
-        return BannerInfo::all();
+        return response([
+            'success' => true,
+            'message' => 'Information Banners',
+            'data' => BannerInfo::all()
+        ],200); 
     }
 
     /**

@@ -344,6 +344,64 @@ class UserAuthController extends Controller
         return NormalUser::destroy($id);
     }
 
+    public function updatePassword(Request $request,$id)
+    {
+        $fields = $request->validate([
+            'old-password' => 'required',
+            'new-password' =>'required|integer|max:6|confirmed'
+        ]);
+
+        $user = NormalUser::where('id',$id)->first();
+
+        if ( !Hash::check($fields['old-password'],$user->password) )
+        {
+            return response([
+                'success' => false,
+                'message' => 'Password is incorrect',
+                'data' => []
+            ], 401);   
+        }
+
+        $user->update([
+            'password' => bcrypt($fields['new-password'])
+        ]);
+        
+        return response([
+            'success' => true,
+            'message' => 'Password Changed successfully',
+            'data' => []
+        ], 201);
+
+    }
+
+    public function updatePhone(Request $request,$id)
+    {   
+        $fields = $request->validate([
+            'password' => 'required',
+            'new-phone' => 'required'
+        ]);
+
+        $user = NormalUser::where('id',$id)->first();
+
+        if ( !Hash::check($fields['password'],$user->password) )
+        {
+            return response([
+                'success' => false,
+                'message' => 'Password is incorrect',
+                'data' => []
+            ], 401);
+        }
+
+        $user->update([
+            'phone-number' => $fields['new-phone']
+        ]);
+
+        return response([
+            'success' => true,
+            'message' => 'Phone Number Changed successfully',
+            'data' => []
+        ], 201);
+    }
     
     public function searchReferral($name)
     {

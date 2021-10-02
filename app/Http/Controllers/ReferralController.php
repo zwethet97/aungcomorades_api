@@ -32,7 +32,6 @@ class ReferralController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-
             'referral-code' => 'required|string',
             'submitted-userId' => 'required|string|unique:referrals,submitted-userId'
         ]);

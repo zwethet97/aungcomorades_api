@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Tips extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'description',
+        'profileImage',
+        'bannerImage',
+        'title'
+    ];
 }

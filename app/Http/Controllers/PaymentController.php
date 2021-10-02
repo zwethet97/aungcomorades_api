@@ -26,13 +26,14 @@ class PaymentController extends Controller
     {
         $request->validate([
             'accountnumber' => 'required',
-            'userId' => 'required'
+            'userId' => 'required',
+            'username' => 'required'
         ]);
 
         return response([ 
             'success' => true,
             'message' => 'Data Created',
-            'data' => PaymentInfo::all()
+            'data' => PaymentInfo::create($request->all())
         ],201);    
     }
     

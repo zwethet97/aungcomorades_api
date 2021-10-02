@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BetSlipController;
 use App\Http\Controllers\BetCheckController;
 use App\Http\Controllers\BannerInfoController;
+use App\Http\Controllers\TipsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::post('/final-reset', [UserAuthController::class, 'verifyOTPreset']);
 // Route::get('/products', [ProductController::class, 'index']);
 // Route::get('/products/{id}', [ProductController::class, 'show']);
 // Route::get('/products/search/{name}', [ProductController::class, 'search']);
+Route::get('/bet-time-check', [TwoDController::class, 'checkTime']);
 Route::get('/dtwod', [TwoDController::class, 'index']);
 Route::get('/dtwod/{id}', [TwoDController::class, 'show']);
 Route::get('/dtwod/search/{date}', [TwoDController::class, 'search']);
@@ -51,6 +53,17 @@ Route::get('/thaithreed/search/{date}', [ThaiThreeDController::class, 'search'])
 Route::get('/info', [BannerController::class, 'index']);
 Route::post('/info', [BannerController::class, 'store']);
 Route::get('/check', [BetCheckController::class, 'checkBet']);
+Route::get('/betdetail/{id}', [BetSlipController::class, 'betDetail']);
+Route::get('/tips', [TipsController::class, 'index']);
+Route::get('/twod/todaytips/{id}', [TipsController::class, 'searchTwoDTodayTips']);
+Route::get('/soccer/todaytips/{id}', [TipsController::class, 'searchSoccerTodayTips']);
+Route::get('/soccer-tipshistory/{id}', [TipsController::class, 'searchSoccerTipsHistory']);
+Route::get('/twod-tipshistory/{id}', [TipsController::class, 'searchTipsHistory']);
+
+
+
+
+
 
 
 
@@ -90,7 +103,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/normal-user', [UserAuthController::class, 'index']);
     Route::get('/normal-user/search/{referral}', [UserAuthController::class, 'searchReferral']);
     Route::get('/normal-user/{phone}', [UserAuthController::class, 'searchPhone']);   
-Route::post('/profile/{id}', [UserAuthController::class, 'update']);
+    Route::post('/profile/{id}', [UserAuthController::class, 'update']);
 
 });
 
