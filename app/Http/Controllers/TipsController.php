@@ -5,6 +5,7 @@ use App\Models\Tips;
 use App\Models\SoccerTips;
 use App\Models\todayTips;
 use App\Models\SoccerTodayTips;
+use App\Models\TipBanner;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -32,7 +33,16 @@ class TipsController extends Controller
         ],200);
 
     }
+    
+    public function showBanner()
+    {
+        return response([
+            'success'=> true,
+            'message'=> 'Tip Banner',
+            'data' => TipBanner::all()
+                ],200);
 
+    }
     /**
      * Store a newly created resource in storage.
      *

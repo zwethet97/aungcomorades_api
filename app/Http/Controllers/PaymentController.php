@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\PaymentInfo;
+use App\Models\adminPayment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -13,7 +14,20 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return PaymentInfo::all();
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => PaymentInfo::all()
+        ],200); 
+    }
+
+    public function adminPayment()
+    {
+        return response([ 
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => adminPayment::all()
+        ],200); 
     }
 
     /**
@@ -46,10 +60,19 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
+        
+        if(!PaymentInfo::where('userId',$id)->first())
+        {
+            return response([ 
+                'success' => false,
+                'message' => 'Data not found',
+                'data' => []
+            ],200);  
+        }
         return response([ 
             'success' => true,
             'message' => 'Data Found',
-            'data' => PaymentInfo::find($id)
+            'data' => PaymentInfo::where('userId',$id)->get()
         ],200);  
         
     }

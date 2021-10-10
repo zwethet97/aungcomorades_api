@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DtwoD;
-
+use Goutte\Client;
+// use Symfony\Component\HttpClient\HttpClient;
+// use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -16,11 +18,61 @@ class TwoDController extends Controller
      */
     public function index()
     {   
-        return response([
-            'success' => true,
-            'message' => 'Data Found',
-            'data' => DtwoD::all()
-        ],200);
+        $date = Carbon::now('Asia/Yangon');
+        $date->setISODate(2021,$date->weekOfYear);
+        $start = $date->startOfWeek()->format('d.m.Y');
+        $end = $date->endOfWeek()->format('d.m.Y');
+
+        
+        // $curl = curl_init();
+
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "https://luke.2dboss.com/api/luke/twod-result-live",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_TIMEOUT => 30000,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => array(
+        //         // Set Here Your Requesred Headers
+        //         'Content-Type: application/json',
+        //     ),
+        // ));
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+        // curl_close($curl);
+        
+        // if ($err) {
+        //     return response("cURL Error #:" . $err);
+        // } else {
+        //     $r = json_decode($response,true);
+        //     return $r['data']['set_1200'];
+        // }
+        // return response([
+        //     'success' => true,
+        //     'message' => 'Data Found',
+        //     'data' => DtwoD::all()
+        // ],200);
+        
+        // $client = new Client();
+        // $crawler = $client->request('GET','https://marketdata.set.or.th/mkt/marketsummary.do?language=en&country=US');
+
+        // $link1 = $crawler->filter('.table-info tr td')->eq(1)->text();
+        // $link2 = $crawler->filter('.table-info tr td')->eq(7)->text();
+        // $set = substr($link1,-2,2);
+        // $value = substr($link2,-4,-3);
+        // $twod = $set.$value;
+        
+        // $data = [
+        //     'set' => $link1,
+        //     'value' => $link2,
+        //     'twod' => $twod
+        // ];
+        // return response([
+        //     'success' => true,
+        //     'message' => 'Data Found',
+        //     'data' => $data
+        // ],200);
     }
 
     public function checkTime(){
@@ -30,8 +82,8 @@ class TwoDController extends Controller
         $currentYear = Carbon::now('Asia/Yangon')->format('Y');
         
 
-        $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,11,01,00, 'Asia/Yangon');
-        $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,16,31,00, 'Asia/Yangon');
+        $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,11,45,00, 'Asia/Yangon');
+        $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
         $UserTime = Carbon::now('Asia/Yangon');
 
 
@@ -46,17 +98,20 @@ class TwoDController extends Controller
             if ( $UserTime->lt($NoonLimit) )
         {   
             $noonTime = [
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '11:45 PM',
                 'forTime' => $NoonLimit
             ];
 
             $eveningTime = [
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:45 PM',
                 'forTime' => $UserTime
             ];
 
             $avail = [
                 'bet-time' => 'Both Lottery Time Available',
+                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];
@@ -69,12 +124,14 @@ class TwoDController extends Controller
         elseif ($UserTime->gt($NoonLimit) && $UserTime->lt($EveningLimit))
         {
             $eveningTime = [
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:45 PM',
                 'forTime' => '4:31 PM'
             ];
 
             $avail = [
                 'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
+                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
                 'eveningTime' => $eveningTime
             ];
             return response([
@@ -86,17 +143,20 @@ class TwoDController extends Controller
         elseif ($UserTime->gt($EveningLimit))
         {
             $noonTime = [
-                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d-m-Y'),
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '11:45 PM',
                 'forTime' => '12:01 PM'
             ];
 
             $eveningTime = [
-                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d-m-Y'),
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:45 PM',
                 'forTime' => '4:31 PM'
             ];
 
             $avail = [
                 'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d-m-Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];

@@ -136,7 +136,17 @@ class BetSlipController extends Controller
     }
     
     public function search($name)
-    {
+    {   
+        $userId = Bettors::where('userId', 'like', '%'.$name.'%')->get();
+        if (!Bettors::where('userId', 'like', '%'.$name.'%')->first())
+        {
+            return response([
+                'success' => false,
+                'data' => 'No Betslips!',
+                'message' => []
+            ],200);
+
+        }
         return response([
             'success' => true,
             'data' => 'UserID Payment Data Found Successfully',

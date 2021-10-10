@@ -42,13 +42,11 @@ class ReferralController extends Controller
         $referralrolecount = Referrals::where('referral-code', $fields['referral-code'])->count();
 
         if( !$checkreferral || $checksubmitted == $fields['referral-code'] ){
-
-        
             return response([
                 'success'  => false,
                 'message' => "Referrals already exist or you can't submit your own referral code",
                 'data' => ''
-            ], 401);
+            ], 201);
         }
 
         if ( $referralrole == 'silver' || $referralrolecount >= 10 )
@@ -97,9 +95,24 @@ class ReferralController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($code)
     {
-        //
+        $submitted = [];
+        
+        $Susers = Referrals::where('referral-code','like', '%'.$code.'%')->get();
+
+        foreach($Susers as $Suser)
+        {   
+            $user = NormalUser::where('id',$Suser['submitted-userId'])->first();
+            $submitted[] = [
+                'Your Referrals' => $user
+            ];
+        }
+        return response([
+            'success' => true,
+            'message' => 'Submitted User List',
+            'data' => $submitted
+        ],200);
     }
 
     /**
@@ -125,11 +138,21 @@ class ReferralController extends Controller
         
     }
     public function search($name)
-    {
+    {   
+        if (!Referrals::where('referral-code', 'like', '%'.$name.'%')->first()) 
+        {
+            return response([
+                'success' => false,
+                'message' => 'Date Not Found',
+                'data' => []
+            ],200);
+        }
+        
+
         return response([
             'success' => true,
             'message' => 'Data Found',
-            'data' => Referrals::where('submitted-userId', 'like', '%'.$name.'%')->get()
+            'data' => NormalUser::where('referral-code', 'like', '%'.$name.'%')->get()
         ],200);
     }
 }

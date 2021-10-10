@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NormalUser;
+use App\Models\Referrals;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -55,7 +56,7 @@ class UserAuthController extends Controller
                     'success' => false,
                     'message' => 'Phone Number is already registered',
                     'data' => []
-                ],401);
+                ],200);
             }
         }
 
@@ -148,7 +149,7 @@ class UserAuthController extends Controller
                     'success'=> false,
                     'message'=> 'OTP is incorrect',
                     'data' => []
-                ],400);
+                ],200);
                 }
             }
             else
@@ -157,7 +158,7 @@ class UserAuthController extends Controller
                     'success'=> false,
                     'message'=> 'Phone Number does not exit',
                     'data' => []
-                ],400);
+                ],200);
             }
         
     }
@@ -218,7 +219,7 @@ class UserAuthController extends Controller
                 'success'=> false,
                 'message'=> 'Phone Number does not exit',
                 'data' => []
-            ],400);
+            ],200);
         }
 
         $otp = rand(100000, 999999);
@@ -272,7 +273,7 @@ class UserAuthController extends Controller
                 'success'=> false,
                 'message'=> 'Phone Number does not exit',
                 'data' => []
-            ],400); 
+            ],200); 
         }
 
         if ($verifyphone->otp != $fields['otp'])
@@ -281,7 +282,7 @@ class UserAuthController extends Controller
                 'success'=> false,
                 'message'=> 'OTP is not correct',
                 'data' => []
-            ],400);
+            ],200);
         }
 
         $verifyphone->update([
@@ -317,8 +318,8 @@ class UserAuthController extends Controller
     public function update(Request $request, $id)
     {   
         $fields = $request->validate([
-            'username' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'username' => 'string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
 
         ]);
         $imageName = time().'.'.$request->image->extension();  
@@ -348,7 +349,7 @@ class UserAuthController extends Controller
     {
         $fields = $request->validate([
             'old-password' => 'required',
-            'new-password' =>'required|integer|max:6|confirmed'
+            'new-password' =>'required|string|max:6|confirmed'
         ]);
 
         $user = NormalUser::where('id',$id)->first();
@@ -377,40 +378,111 @@ class UserAuthController extends Controller
     public function updatePhone(Request $request,$id)
     {   
         $fields = $request->validate([
-            'password' => 'required',
             'new-phone' => 'required'
         ]);
 
         $user = NormalUser::where('id',$id)->first();
 
-        if ( !Hash::check($fields['password'],$user->password) )
-        {
-            return response([
-                'success' => false,
-                'message' => 'Password is incorrect',
-                'data' => []
-            ], 401);
-        }
+        
+        $otp = rand(100000, 999999);
+        $otpstring = strval($otp);
 
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      $fields['new-phone'],
+            "message"   =>      "Your OTP is " . $otpstring ,
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+        
         $user->update([
-            'phone-number' => $fields['new-phone']
+            'otp'  => $otpstring
         ]);
 
         return response([
             'success' => true,
-            'message' => 'Phone Number Changed successfully',
+            'message' => 'OTP is set for Update Phone',
             'data' => []
         ], 201);
+    }
+
+    public function updatePhone2(Request $request,$id){
+        $fields = $request->validate([
+            'phone-number' => 'required',
+            'otp' => 'required'
+        ]);
+        $user = NormalUser::where('id',$id)->first();
+        if ($user->otp !== $fields['otp'])
+        {
+            return response([
+                'success' => false,
+                'message' => 'OTP is not correct!',
+                'data' => []
+            ],200);
+        }
+        $user->update([
+            'phone-number' => $fields['phone-number']
+        ]);
+
+        Referrals::where('submitted-userId',$fields['phone-number'])->update([
+            'submitted-userId' => $fields['phone-number']
+        ]);
+
+        return response([
+            'success' => true,
+            'message' => 'Changing Phone Number Successfully!',
+            'data' => $user
+        ],200);
+
+
     }
     
     public function searchReferral($name)
     {
-        return NormalUser::where('referral-code', 'like', '%'.$name.'%')->get();
+        if (!NormalUser::where('referral-code', 'like', '%'.$name.'%')->first())
+        {
+            return response([
+            'success' => false,
+            'message' => 'No User with this Referral Number',
+            'data' => []
+            ], 200);
+        }
+        return response([
+            'success' => true,
+            'message' => 'Search User with Referral Code',
+            'data' => NormalUser::where('referral-code', 'like', '%'.$name.'%')->get()
+        ],200);
     }
 
     public function searchPhone($name)
-    {
-        return NormalUser::where('phone-number', 'like', '%'.$name.'%')->get();
+    {   
+
+        if (!NormalUser::where('phone-number', 'like', '%'.$name.'%')->first())
+        {
+            return response([
+            'success' => false,
+            'message' => 'No User with this Phone Number',
+            'data' => []
+            ], 200);
+        }
+        return response([
+            'success' => true,
+            'message' => 'Search User with Phone Number',
+            'data' => NormalUser::where('phone-number', 'like', '%'.$name.'%')->get()
+        ],200);
     }
     
     public function logout(Request $request){

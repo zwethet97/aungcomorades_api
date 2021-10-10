@@ -5,6 +5,7 @@ use App\Models\Transaction;
 use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Noti;
 
 
 class TransactionController extends Controller
@@ -52,13 +53,20 @@ class TransactionController extends Controller
 
         $changeamount = NormalUser::find($fields['userId']);
         $existingamount = $changeamount->credits;
-        $changeamount->update([
-            'credits' => $existingamount + $fields['amount']
-        ]);
+        // $changeamount->update([
+        //     'credits' => $existingamount + $fields['amount']
+        // ]);
         
+        Noti::insert([
+            'description' => 'Your Deposit Request is currently is on progress. Please wait for Admin Response',
+            'userId' => $fields['userId'],
+            'type' => 'transaction',
+            'id' => $deposit->id
+        ]);
+
         return response([ 
             'success' => true,
-            'message' => 'Deposit Successfully! Alert Admin for Credits',
+            'message' => 'Deposit Request Successfully! Alert Admin for Credits',
             'data' => $deposit
         ], 201);
     }
@@ -84,6 +92,8 @@ class TransactionController extends Controller
             ], 401);
         }
 
+        
+
         $changeamount->update([
             'credits' => $existingamount - $fields['amount']
         ]);
@@ -97,6 +107,13 @@ class TransactionController extends Controller
             'amount' => $fields['amount'],
             'transferuserId' => '-',
             'screen-shot' => '-'
+        ]);
+
+        Noti::insert([
+            'description' => 'Your Withdraw Request is currently is on progress. Please wait for Admin Response',
+            'userId' => $fields['userId'],
+            'type' => 'transaction',
+            'id' => $withdraw->id
         ]);
         
         return response([ 
@@ -139,7 +156,7 @@ class TransactionController extends Controller
                 'data' => []
             ], 401);
         }
-
+       
         $transferUserExistingamount = $transferUser->credits;
         $transferUser->update([
             'credits' => $transferUserExistingamount + $fields['amount']
@@ -156,11 +173,55 @@ class TransactionController extends Controller
             'screen-shot' => '-'
         ]);
 
+        Noti::insert([
+            'description' => 'Amount '.$fields['amount'].'is successfully to transfer to '.$fields['transferuserId'],
+            'userId' => $fields['userId'],
+            'type' => 'transaction',
+            'id' => $transfer->id
+        ]);
+
         return response([ 
             'success' => true,
             'message' => 'Transfer Successfully',
             'data' => $transfer
         ], 201);    
+    }
+
+    public function upgrade($id) {
+
+        $userId = NormalUser::where('id',$id)->first();
+        $existingCredit = $userId->credits;
+        
+        if ($userId['user-level'] != 'normal')
+        {  
+            return response([ 
+                'success' => false,
+                'message' => 'User is already upgraded',
+                'data' => []
+            ], 200);
+
+        }
+
+        if ( $userId['credits'] < 10000 )
+        {  
+            return response([ 
+                'success' => false,
+                'message' => 'Not Enought Credits to upgrade',
+                'data' => []
+            ], 200);
+
+        }
+
+        $update = $userId->update([
+            'user-level' => 'silver',
+            'credits' => $existingCredit - 10000
+        ]);
+
+        return response([ 
+            'success' => true,
+            'message' => 'User Level Upgraded to SILVER',
+            'data' => $userId
+        ], 201);  
     }
     
     /**
