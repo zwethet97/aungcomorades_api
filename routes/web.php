@@ -22,3 +22,10 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/home', [App\Http\Controllers\UserAuthController::class, 'index']);
 
+Route::prefix('admin')->group(function(){
+     Route::resource('/users',App\Http\Controllers\Admin\UserController::class);
+     Route::resource('/betslips',App\Http\Controllers\Admin\BetSlipController::class);
+
+
+});
+

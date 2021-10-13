@@ -21,10 +21,24 @@ class ThreeDController extends Controller
         $start = $date->startOfWeek()->format('d.m.Y');
         $end = $date->endOfWeek()->format('d.m.Y');
 
+        $monday = DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->get();
+        $tuesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->get();
+        $wednesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->get();
+        $thursday = DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->get();
+        $friday = DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->get();
+
+        $week = [
+            'Monday' => $monday,
+            'Tuesday' => $tuesday,
+            'Wednesday' => $wednesday,
+            'Thursday' => $thursday,
+            'Friday' => $friday
+        ];
+
         return response([
             'success' => true,
             'message' => 'Current Week Results',
-            'data' => DthreeD::whereBetween('date',[$start,$end])->get()
+            'data' => $week
         ],200);
 
         // $date = Carbon::now('Asia/Yangon')->format('d-m-Y');
@@ -86,6 +100,20 @@ class ThreeDController extends Controller
         $start = $date->startOfWeek()->format('d.m.Y');
         $end = $date->endOfWeek()->format('d.m.Y');
 
+        $monday = DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->get();
+        $tuesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->get();
+        $wednesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->get();
+        $thursday = DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->get();
+        $friday = DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->get();
+
+        $week = [
+            'Monday' => $monday,
+            'Tuesday' => $tuesday,
+            'Wednesday' => $wednesday,
+            'Thursday' => $thursday,
+            'Friday' => $friday
+        ];
+
         if(!DthreeD::whereBetween('date',[$start,$end])->first())
         {  
             return response([
@@ -98,7 +126,7 @@ class ThreeDController extends Controller
         return response([
             'success' => true,
             'message' => 'Current Week Results',
-            'data' => DthreeD::whereBetween('date',[$start,$end])->get()
+            'data' => $week
         ],200);
     }
 

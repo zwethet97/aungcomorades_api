@@ -1,38 +1,35 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Noti;
+use App\Models\NormalUser;
 use Illuminate\Http\Request;
 
-class NotiController extends Controller
+class AdminUserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __construct()
     {
-        
-        
+        $this->middleware('auth');
     }
 
-    public function showbyUserId($userid)
+    public function index()
     {
-        $allnoti = Noti::where('userId','all')->get();
-        $notibyuserId = Noti::where('userId',$userid)->get();
+        return view('admin.users.index',['users' => NormalUser::all()]);
+    }
 
-        $allnoti = [
-            'annoucements' => $allnoti,
-            'user noti' => $notibyuserId
-        ];
-        if (!Noti::where('userId','all')->first() || !Noti::where('userId', $userid)->first() )
-        return response([
-            'success' => false,
-            'message' => 'No Notifications',
-            'data' => []
-        ],200);
-    }   
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -52,6 +49,17 @@ class NotiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
