@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BannerInfo;
+use App\Models\Tips;
 
 use Illuminate\Http\Request;
 
@@ -14,11 +15,15 @@ class BannerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        $banner = [
+            'info Banner' => BannerInfo::all(),
+            'Tip Banner' => Tips::all()
+        ];
         return response([
             'success' => true,
             'message' => 'Information Banners',
-            'data' => BannerInfo::all()
+            'data' => $banner
         ],200); 
     }
 
@@ -34,7 +39,7 @@ class BannerController extends Controller
             'banner_image' => 'required',
             'title' => 'required',
             'description' =>'required'
-        ]);
+        ]); 
         return response([
             'success' => true,
             'message' => 'Data Created',

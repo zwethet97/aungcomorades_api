@@ -95,6 +95,26 @@ class ReferralController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function check_submit($submitid)
+    {
+        $submituser = Referrals::where('submitted-userId',$submitid)->first();
+        
+        if (!$submituser)
+        {
+            return response([
+                'success' => false,
+                'message' => 'Data Not Found',
+                'data' => []
+            ],200);
+        }
+
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => $submituser
+        ],200);
+
+    }
     public function show($code)
     {
         $submitted = [];
@@ -104,9 +124,7 @@ class ReferralController extends Controller
         foreach($Susers as $Suser)
         {   
             $user = NormalUser::where('id',$Suser['submitted-userId'])->first();
-            $submitted[] = [
-                'Your Referrals' => $user
-            ];
+            $submitted[] = $user;
         }
         return response([
             'success' => true,

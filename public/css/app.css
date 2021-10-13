@@ -47,7 +47,10 @@
 *::after {
   box-sizing: border-box;
 }
-
+#myTable_wrapper
+{
+  padding:1%;
+}
 html {
   font-family: sans-serif;
   line-height: 1.15;

@@ -234,7 +234,6 @@ class UserAuthController extends Controller
             "sender"    =>      "Aung Pwal"
         ];
         
-        
         $ch = curl_init("https://smspoh.com/api/v2/send");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -251,7 +250,7 @@ class UserAuthController extends Controller
         ]);
 
         return response([
-            'success'=> false,
+            'success'=> true,
             'message'=> 'OTP is already sent for Password Reset',
             'data' => []
         ], 201);
@@ -262,7 +261,6 @@ class UserAuthController extends Controller
         $fields = $request->validate([
             'phone-number' => 'required|string',
             'otp' => 'required|string',
-            'password' => 'required|string|confirmed|max:6'
         ]);
 
         $verifyphone = NormalUser::where('phone-number', $fields['phone-number'])->first();
@@ -284,16 +282,34 @@ class UserAuthController extends Controller
                 'data' => []
             ],200);
         }
+        // $verifyphone->update([
+        //     'password' => bcrypt($fields['password'])
+        // ]);
+        return response([
+                'success'=> true,
+                'message'=> 'OTP Verified. Step 3 still need',
+                'data' => []
+            ],201);
+        
+    }
+    public function finalpwdreset(Request $request)
+    {
+        $fields = $request->validate([
+            'phone-number' => 'required',
+            'password' => 'required|confirmed|max:6'
+        ]);
 
-        $verifyphone->update([
-            'password' => bcrypt($fields['password'])
+        $userphone = NormalUser::where('phone-number',$fields['phone-number'])->first();
+
+        $userphone->update([
+             'password' => bcrypt($fields['password'])
         ]);
 
         return response([
-                'success'=> true,
-                'message'=> 'Password resets successfully',
-                'data' => []
-            ],201);
+            'success'=> true,
+            'message'=> 'Password resets successfully',
+            'data' => []
+        ],201);
         
     }
 
@@ -304,8 +320,12 @@ class UserAuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        return NormalUser::find($id);
+    {   
+        return response([
+            'success'=> true,
+            'message'=> 'UserId Data',
+            'data' => NormalUser::find($id)
+        ],200);
     }
 
     /**

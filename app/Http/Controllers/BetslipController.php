@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\BetSlip;
 use App\Models\BetInteger;
+use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,15 @@ class BetSlipController extends Controller
             'bet-numbers' => 'required',
             'selected-total-number' => 'required'
         ]);
+
+        if ( NormalUser::where('id',$fields['userId'])->value('amount') < $fields['total-bet-amount'] )
+        {
+            return response([
+                'success' => false,
+                'data' => 'Do not enough credits',
+                'message' => []
+            ],200); 
+        }
         
         $betslip = BetSlip::create([
 
@@ -87,6 +97,11 @@ class BetSlipController extends Controller
             'bets' => $betintegers
         ];
         
+        $existamount = NormalUser::where('id',$fields['userId'])->value('amount');
+        NormalUser::where('id',$fields['userId'])->update([
+            'amount' => $existamount - $fields['total-bet-amount']
+        ]);
+
         return response([
             'success' => true,
             'data' => 'Data Created Successfully',
