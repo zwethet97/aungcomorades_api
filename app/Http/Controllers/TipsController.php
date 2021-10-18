@@ -138,7 +138,7 @@ class TipsController extends Controller
      */
     public function searchTipsHistory($id)
     {
-        $history = todayTips::where('tips_id',$id)->get();
+        $history = TipRecord::where('tip_id',$id)->get();
         return response([
             'success' => true,
             'message' => 'Data Found',
@@ -146,15 +146,15 @@ class TipsController extends Controller
         ],200);    
     }
 
-    public function searchSoccerTipsHistory($id)
-    {
-        $history = SoccerTodayTips::where('soccer_tips_id',$id)->get();
-        return response([
-            'success' => true,
-            'message' => 'Data Found',
-            'data' => $history
-        ],200);    
-    }
+    // public function searchSoccerTipsHistory($id)
+    // {
+    //     $history = SoccerTodayTips::where('soccer_tips_id',$id)->get();
+    //     return response([
+    //         'success' => true,
+    //         'message' => 'Data Found',
+    //         'data' => $history
+    //     ],200);    
+    // }
 
 
     /**

@@ -89,7 +89,7 @@ class TransactionController extends Controller
                 'success' => false,
                 'message' => 'Not Enough Credits',
                 'data' => []
-            ], 401);
+            ], 200);
         }
 
         
@@ -140,7 +140,7 @@ class TransactionController extends Controller
                 'success' => false,
                 'message' => 'Not Enough Credits',
                 'data' => []
-            ], 401);
+            ], 200);
         }
 
         $changeamount->update([
@@ -154,7 +154,7 @@ class TransactionController extends Controller
                 'success' => false,
                 'message' => "You can't transfer to your account",
                 'data' => []
-            ], 401);
+            ], 200);
         }
        
         $transferUserExistingamount = $transferUser->credits;

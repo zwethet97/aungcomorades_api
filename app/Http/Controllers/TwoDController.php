@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DtwoD;
 use Goutte\Client;
+use App\Models\DthreeD;
 // use Symfony\Component\HttpClient\HttpClient;
 // use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Http\Request;
@@ -18,10 +19,64 @@ class TwoDController extends Controller
      */
     public function index()
     {   
-        $date = Carbon::now('Asia/Yangon');
-        $date->setISODate(2021,$date->weekOfYear);
-        $start = $date->startOfWeek()->format('d.m.Y');
-        $end = $date->endOfWeek()->format('d.m.Y');
+                $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
+                $time = Carbon::now('Asia/Yangon')->format('g:i A');
+                $day = Carbon::createFromFormat('d.m.Y',$date)->format('l');
+                
+                $curl = curl_init();
+        
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://luke.2dboss.com/api/luke/twod-result-live",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_TIMEOUT => 30000,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_HTTPHEADER => array(
+                        // Set Here Your Requesred Headers
+                        'Content-Type: application/json',
+                    ),
+                ));
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+                curl_close($curl);
+                
+                if ($err) {
+                    return response("cURL Error #:" . $err);
+                } else {
+                    $r = json_decode($response,true);
+                    $set = $r['data']['set_1200'];
+                    $value = $r['data']['val_1200'];
+                    $modern = $r['data']['modern_930'];
+                    $internet = $r['data']['internet_930'];
+                    $closeday = $r['data']['is_close_day'];
+        
+                    $set3d = substr($set,-2,2);
+                    $value3d = substr($value,-4,-3);
+                    $threed = $set3d.$value3d;
+                    
+            if ( $closeday == 0 ) 
+                    {
+                    DthreeD::insert([
+                        '3D' => $threed,
+                        'set' => $set,
+                        'value' => $value,
+                        'modern' => $modern,
+                        'internet' => $internet,
+                        'date' => $date,
+                        'day' => $day,
+                        'time' => $time
+                    ]);
+
+                    return true;
+                }
+                }
+        // $date = Carbon::now('Asia/Yangon');
+        // $date->setISODate(2021,$date->weekOfYear);
+        // $start = $date->startOfWeek()->format('d.m.Y');
+        // $end = $date->endOfWeek()->format('d.m.Y');
+
+        
 
         
         // $curl = curl_init();
@@ -111,7 +166,7 @@ class TwoDController extends Controller
 
             $avail = [
                 'bet-time' => 'Both Lottery Time Available',
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];
@@ -131,7 +186,8 @@ class TwoDController extends Controller
 
             $avail = [
                 'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
+                'noonTime' => [],
                 'eveningTime' => $eveningTime
             ];
             return response([
@@ -156,7 +212,7 @@ class TwoDController extends Controller
 
             $avail = [
                 'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
-                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];

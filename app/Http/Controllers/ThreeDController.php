@@ -28,11 +28,27 @@ class ThreeDController extends Controller
         $friday = DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->get();
 
         $week = [
-            'Monday' => $monday,
-            'Tuesday' => $tuesday,
-            'Wednesday' => $wednesday,
-            'Thursday' => $thursday,
-            'Friday' => $friday
+            'Monday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','4:31 PM')->get()
+            ],
+            'Tuesday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','4:31 PM')->get()
+            ],
+            'Wednesday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','4:31 PM')->get()
+            ],
+            'Thursday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','4:31 PM')->get()
+            ],
+            'Friday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','4:31 PM')->get()
+            ]
+            
         ];
 
         return response([
@@ -85,13 +101,7 @@ class ThreeDController extends Controller
         //         'date' => $date,
         //         'day' => $day,
         //         'time' => $time
-        //     ]);
-
-            
-
-        
-        
-    
+        //     ]); 
     }
     public function weeknumber($year,$weekno)
     {   
@@ -107,11 +117,26 @@ class ThreeDController extends Controller
         $friday = DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->get();
 
         $week = [
-            'Monday' => $monday,
-            'Tuesday' => $tuesday,
-            'Wednesday' => $wednesday,
-            'Thursday' => $thursday,
-            'Friday' => $friday
+            'Monday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','4:31 PM')->get()
+            ],
+            'Tuesday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','4:31 PM')->get()
+            ],
+            'Wednesday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','4:31 PM')->get()
+            ],
+            'Thursday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','4:31 PM')->get()
+            ],
+            'Friday' => [
+                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','4:31 PM')->get()
+            ]
         ];
 
         if(!DthreeD::whereBetween('date',[$start,$end])->first())
@@ -119,7 +144,7 @@ class ThreeDController extends Controller
             return response([
                 'success' => false,
                 'message' => 'Results Not Available',
-                'data' => []
+                'data' => (object)[]
             ],200);
         }
 
@@ -143,10 +168,10 @@ class ThreeDController extends Controller
 
 
         $time = Carbon::now('Asia/Yangon')->format('d-m-Y H:i:s');
-        $out = [
-            'twod' => DtwoD::all(),
-            'time' => $time
-        ];
+        // $out = [
+        //     'twod' => DtwoD::all(),
+        //     'time' => $time
+        // ];
 
         if ( !Carbon::now('Asia/Yangon')->isWeekend() )
         {
@@ -166,7 +191,7 @@ class ThreeDController extends Controller
 
             $avail = [
                 'bet-time' => 'Both Lottery Time Available',
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];
@@ -186,7 +211,8 @@ class ThreeDController extends Controller
 
             $avail = [
                 'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
-                'forDate' => Carbon::now('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
+                'noonTime' => [],
                 'eveningTime' => $eveningTime
             ];
             return response([
@@ -211,7 +237,7 @@ class ThreeDController extends Controller
 
             $avail = [
                 'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
-                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d-m-Y'),
+                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
             ];
@@ -229,8 +255,6 @@ class ThreeDController extends Controller
                 'data' => []
             ],200);
         }
-
-
       }
       else
       {

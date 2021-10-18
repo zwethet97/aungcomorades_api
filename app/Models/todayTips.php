@@ -10,13 +10,11 @@ class todayTips extends Model
     use HasFactory;
     protected $fillable = [
         'tips_id',
-        'date',
         'bannerImageOne',
         'imageOneDescription',
         'bannerImageTwo',
         'imageTwoDescription',
         'bannerImageThree',
-        'imageThreeDescription',
-        'date',
+        'imageThreeDescription'
     ];
 }

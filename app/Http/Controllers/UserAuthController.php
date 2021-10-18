@@ -69,7 +69,7 @@ class UserAuthController extends Controller
         // Prepare data for POST request
         $data = [
             "to"        =>      $fields['phone-number'],
-            "message"   =>      "Your OTP is " . $otpstring ,
+            "message"   =>      "AUNG PWAL: Your Sing Up OTP is " . $otpstring ,
             "sender"    =>      "Aung Pwal"
         ];
         
@@ -230,7 +230,7 @@ class UserAuthController extends Controller
         // Prepare data for POST request
         $data = [
             "to"        =>      $fields['phone-number'],
-            "message"   =>      "Your OTP is " . $otpstring ,
+            "message"   =>      "AUNG PWAL: Your Reset Password OTP is " . $otpstring ,
             "sender"    =>      "Aung Pwal"
         ];
         
@@ -412,7 +412,7 @@ class UserAuthController extends Controller
         // Prepare data for POST request
         $data = [
             "to"        =>      $fields['new-phone'],
-            "message"   =>      "Your OTP is " . $otpstring ,
+            "message"   =>      "AUNGPWAL: Your Change Phonenumber OTP is " . $otpstring ,
             "sender"    =>      "Aung Pwal"
         ];
         

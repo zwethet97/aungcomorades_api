@@ -49,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table table-hover text-nowrap" id="myTable">
+                <table class="table table-hover text-nowrap">
                   <thead>
                     <tr>
                       <th>UserId</th>
@@ -59,32 +59,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <th>Total Selected Numbers</th>
                       <th>Total Amount</th>
                       <th>Status</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($betslips as $betslip)
                     <tr>
-                      <td>{{ $betslip['userId'] }}</td>
-                      <td>{{ $betslip['type'] }}</td>
-                      <td>{{ $betslip['forDate'] }} {{ $betslip['forTime'] }}</td>
-                      <td>{{ $betslip['bet-numbers'] }}</td>
-                      <td>{{ $betslip['selected-total-number'] }}</td>
-                      <td>{{ $betslip['total-bet-amount'] }}</td>
-                      <td>{{ $betslip['status'] }}</td>
-
-                      <td>
-                          <a href="{{ route('betslips.show', $betslip->id) }}" class="btn btn-sm btn-success" role="button">View Detail</a>
-                            <!-- <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $betslip->id }}').submit()">
-                            Delete
-                        </button>
-                            <form id="delete-user-form-{{ $betslip->id }}" action="{{ route('betslips.destroy', $betslip->id ) }}" method="POST" style="display:none">
-                                @csrf
-                                @method("DELETE")
-                            </form> -->
-                    </td>
+                      <td>{{ $betslipid['userId'] }}</td>
+                      <td>{{ $betslipid['type'] }}</td>
+                      <td>{{ $betslipid['forDate'] }} {{ $betslipid['forTime'] }}</td>
+                      <td>{{ $betslipid['bet-numbers'] }}</td>
+                      <td>{{ $betslipid['selected-total-number'] }}</td>
+                      <td>{{ $betslipid['total-bet-amount'] }}</td>
+                      <td>{{ $betslipid['status'] }}</td>
                     </tr>
-                    @endforeach
                   </tbody>
                 </table>
                
