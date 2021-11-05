@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\DthreeD;
+use App\Models\Noti;
 use Goutte\Client;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\DomCrawler\Crawler;
@@ -40,7 +41,7 @@ class Kernel extends ConsoleKernel
             // $value = $crawler->filter('.table-info tr td')->eq(7)->text();
             $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
         $time = Carbon::now('Asia/Yangon')->format('g:i A');
-        $day = Carbon::createFromFormat('d-m-Y',$date)->format('l');
+        $day = Carbon::createFromFormat('d.m.Y',$date)->format('l');
         
         $curl = curl_init();
 
@@ -83,10 +84,71 @@ class Kernel extends ConsoleKernel
                 'internet' => $internet,
                 'date' => $date,
                 'day' => $day,
-                'time' => $time
+                'time' => '12:01 PM'
             ]);
+            
+            Noti::insert([
+            'description' => $threed.' is Win Number for '.$time.' '.$date,
+            'userId' => 'all',
+            'type' => '-',
+            'typeId' => '-'
+        ]);
+
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      "09777870090",
+            "message"   =>      "12:01 PM Win Number is". $threed,
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+
+        $noti_token = "MjU1MTBhMjMtY2RmMi00NzU4LTliZGUtZWQwYzViNWUxMDNk";
+
+        $contents = [
+            'en' => '12:01 PM Win Number is'.$threed
+        ];
+
+        $headings = [
+            'en' => '12:01 PM Win Number'
+        ];
+
+        $data2 = [
+            'type' => 'all'
+        ];
+
+        $noti_data = [
+            'app_id' => 'e6748a7e-69c4-4f58-bc2f-36eaa11ecbb2',
+            'included_segments' => 'Subscribed Users',
+            'data' => $data2,
+            'headings' => $headings,
+            'contents' => $contents
+        ];
+
+        $ch2 = curl_init("https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($noti_data));
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $noti_token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result2 = curl_exec($ch2);
                 }
-                elseif ( $r['data']['is_close_day'] == 1) 
+                if ($r['data']['is_close_day'] == 1)
                 {
                 DthreeD::insert([
                     '3D' => '---',
@@ -96,11 +158,11 @@ class Kernel extends ConsoleKernel
                     'internet' => '--',
                     'date' => $date,
                     'day' => $day,
-                    'time' => $time
+                    'time' => '12:01 PM'
                 ]);
                     }
         }
-            })->weekdays()->timezone('Asia/Yangon')->at('12:01');
+            })->weekdays()->timezone('Asia/Yangon')->at('12:05');
             
             $schedule->call(function(){
                 // $client = new Client();
@@ -110,7 +172,7 @@ class Kernel extends ConsoleKernel
                 // $value = $crawler->filter('.table-info tr td')->eq(7)->text();
                 $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
                 $time = Carbon::now('Asia/Yangon')->format('g:i A');
-                $day = Carbon::createFromFormat('d-m-Y',$date)->format('l');
+                $day = Carbon::createFromFormat('d.m.Y',$date)->format('l');
                 
                 $curl = curl_init();
         
@@ -155,8 +217,69 @@ class Kernel extends ConsoleKernel
                         'day' => $day,
                         'time' => $time
                     ]);
+                    
+                    Noti::insert([
+            'description' => $threed.'is Win Number for '.$time.' '.$date,
+            'userId' => 'all',
+            'type' => '-',
+            'typeId' => '-'
+        ]);
+
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      "09777870090",
+            "message"   =>      "4:30 PM Win Number is". $threed,
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+
+        $noti_token = "MjU1MTBhMjMtY2RmMi00NzU4LTliZGUtZWQwYzViNWUxMDNk";
+
+        $contents = [
+            'en' => '4:30 PM Win Number is'.$threed
+        ];
+
+        $headings = [
+            'en' => '4:30 PM Win Number'
+        ];
+
+        $data2 = [
+            'type' => 'all'
+        ];
+
+        $noti_data = [
+            'app_id' => 'e6748a7e-69c4-4f58-bc2f-36eaa11ecbb2',
+            'included_segments' => 'Subscribed Users',
+            'data' => $data2,
+            'headings' => $headings,
+            'contents' => $contents
+        ];
+
+        $ch2 = curl_init("https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($noti_data));
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $noti_token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result2 = curl_exec($ch2);
                 }
-                elseif ( $r['data']['is_close_day'] == 1) 
+                else
                     {
                     DthreeD::insert([
                         '3D' => '---',

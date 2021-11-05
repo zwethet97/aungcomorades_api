@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover text-nowrap" id="myTable">
                   <thead>
                     <tr>
                       <th>Phone Number</th>
@@ -109,9 +109,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $user['user-level'] }}</td>
                       <td>{{ $user['credits'] }}</td>
                       <td>
-                          <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-success" role="button">Edit</a>
+                          <a href="{{ route('users.betslip', $user->id) }}" class="btn btn-sm btn-success" role="button">Betslips</a>
+                          <a href="{{ route('users.transaction', $user->id) }}" class="btn btn-sm btn-success" role="button">Transaction</a>
+                          <a href="{{ route('users.referral', $user['referral-code']) }}" class="btn btn-sm btn-success" role="button">Referrals</a>
+
+
                             <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $user->id }}').submit()">
-                            Delete
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                             <form id="delete-user-form-{{ $user->id }}" action="{{ route('users.destroy', $user->id ) }}" method="POST" style="display:none">
                                 @csrf
@@ -157,5 +161,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="{{ asset('js/app.js') }}" ></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js">
+    </script>
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
 </body>
 </html>

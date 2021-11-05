@@ -107,7 +107,6 @@ class ReferralController extends Controller
                 'data' => []
             ],200);
         }
-
         return response([
             'success' => true,
             'message' => 'Data Found',

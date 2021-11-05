@@ -27,10 +27,17 @@ class NotiController extends Controller
             'user noti' => $notibyuserId
         ];
         if (!Noti::where('userId','all')->first() || !Noti::where('userId', $userid)->first() )
+        {
         return response([
             'success' => false,
             'message' => 'No Notifications',
             'data' => []
+        ],200);
+        }
+        return response([
+            'success' => true,
+            'message' => 'Notifications',
+            'data' => $allnoti
         ],200);
     }   
 

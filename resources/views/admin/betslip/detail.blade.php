@@ -54,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <tr>
                       <th>UserId</th>
                       <th>Type</th>
-                      <th>for Date/Time</th>
+                      <th>for Betting Date/Time</th>
                       <th>Bet Numbers</th>
                       <th>Total Selected Numbers</th>
                       <th>Total Amount</th>
@@ -70,6 +70,68 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $betslipid['selected-total-number'] }}</td>
                       <td>{{ $betslipid['total-bet-amount'] }}</td>
                       <td>{{ $betslipid['status'] }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+               
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+              
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Bet Number</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($betintegers as $betinteger)
+                    <tr>
+                      <td>{{ $betinteger['integer'] }}</td>
+                      <td>{{ $betinteger['amount'] }}</td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+               
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <div class="col-8">
+              
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Phone Number</th>
+                      <th>Referral Code</th>
+                      <th>Total Credits</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ $betslipuser['username'] }}</td>
+                      <td>{{ $betslipuser['phone-number'] }}</td>
+                      <td>{{ $betslipuser['referral-code'] }}</td>
+                      <td>{{ $betslipuser['credits'] }}</td>
                     </tr>
                   </tbody>
                 </table>

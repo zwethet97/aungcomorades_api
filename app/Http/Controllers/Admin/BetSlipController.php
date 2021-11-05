@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BetSlip;
 use App\Models\NormalUser;
+use App\Models\Transaction;
 use App\Models\BetInteger;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class BetSlipController extends Controller
     public function index()
     {
         return view('admin.betslip.index',[
-            'betslips' => BetSlip::paginate(10)
+            'betslips' => BetSlip::all()
         ]);
     }
 
@@ -60,8 +61,8 @@ class BetSlipController extends Controller
         $betslip = BetSlip::find($id);
         return view('admin.betslip.detail',[
             'betslipid' => BetSlip::find($id),
-            'betslipuser' => NormalUser::where('id',$betslip->userId)->get(),
-            'betinteger' => BetInteger::where('bet-slip-id',$id)->get()
+            'betslipuser' => NormalUser::where('id',$betslip->userId)->first(),
+            'betintegers' => BetInteger::where('bet-slip-id',$id)->get()
         ]);
     }
 

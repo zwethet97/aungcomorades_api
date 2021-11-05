@@ -61,7 +61,7 @@ class BetSlipController extends Controller
             'selected-total-number' => 'required'
         ]);
 
-        if ( NormalUser::where('id',$fields['userId'])->value('amount') < $fields['total-bet-amount'] )
+        if ( NormalUser::where('id',$fields['userId'])->value('credits') < $fields['total-bet-amount'] )
         {
             return response([
                 'success' => false,
@@ -79,7 +79,9 @@ class BetSlipController extends Controller
             'type' => $fields['type'],
             'bet-numbers' => $fields['bet-numbers'],
             'selected-total-number' => $fields['selected-total-number'],
-            'status' => 'ongoing'
+            'status' => 'ongoing',
+            'referral' => '0',
+            'reward' => '0'
         ]);
         
         $betintegers = $request->betinteger;
@@ -97,9 +99,9 @@ class BetSlipController extends Controller
             'bets' => $betintegers
         ];
         
-        $existamount = NormalUser::where('id',$fields['userId'])->value('amount');
+        $existamount = NormalUser::where('id',$fields['userId'])->value('credits');
         NormalUser::where('id',$fields['userId'])->update([
-            'amount' => $existamount - $fields['total-bet-amount']
+            'credits' => $existamount - $fields['total-bet-amount']
         ]);
 
         return response([

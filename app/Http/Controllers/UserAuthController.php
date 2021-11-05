@@ -91,7 +91,7 @@ class UserAuthController extends Controller
             'phone-number' => $fields['phone-number'],
             'password' => bcrypt($fields['password']),
             'profile-pic-source' => 'https://cdn.pixabay.com/photo/2017/06/13/12/53/profile-2398782_960_720.png',
-            'user-level' => 'normal',
+            'user-level' => 'free',
             'referral-code' => $this->generateRandomString(6),
             'credits' => '0000',
             'verified_otp' => '0',
@@ -178,7 +178,7 @@ class UserAuthController extends Controller
                 'success' => false,
                 'message' => 'Your Phone Number is not registered',
                 'data' => []
-            ], 401);
+            ], 200);
         }
         elseif ( !Hash::check($fields['password'], $verifiedCheck->password))
         {
@@ -186,7 +186,7 @@ class UserAuthController extends Controller
                 'success' => false,
                 'message' => 'Your Phone Number and Password do not match',
                 'data' => []
-            ], 401);
+            ], 200);
         }
         else
         {   
@@ -380,7 +380,7 @@ class UserAuthController extends Controller
                 'success' => false,
                 'message' => 'Password is incorrect',
                 'data' => []
-            ], 401);   
+            ], 200);   
         }
 
         $user->update([

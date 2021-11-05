@@ -6,6 +6,7 @@ use App\Models\SoccerTips;
 use App\Models\todayTips;
 use App\Models\SoccerTodayTips;
 use App\Models\TipBanner;
+use App\Models\TipRecord;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -67,9 +68,9 @@ class TipsController extends Controller
 
     public function searchTwoDTodayTips($id)
     {   
-        $today = Carbon::now()->format('d-m-Y');
+        $today = Carbon::now()->format('d.m.Y');
         $dated = todayTips::where('date', 'like', '%'.$today.'%')
-                ->where('tips_id',$id)
+                ->where('tip_id',$id)
                 ->get();
         if (!todayTips::where('date', 'like', '%'.$today.'%')->first()) 
         {
@@ -77,7 +78,7 @@ class TipsController extends Controller
                 'success' => false,
                 'message' => 'Date Not Found',
                 'data' => []
-            ],401);
+            ],200);
         }
 
         return response([
@@ -100,7 +101,7 @@ class TipsController extends Controller
                 'success' => false,
                 'message' => 'Date Not Found',
                 'data' => []
-            ],401);
+            ],200);
         }
 
         return response([
@@ -119,7 +120,7 @@ class TipsController extends Controller
                 'success' => false,
                 'message' => 'Date Not Found',
                 'data' => []
-            ],401);
+            ],200);
         }
 
         return response([

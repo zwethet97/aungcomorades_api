@@ -14,6 +14,8 @@ use App\Http\Controllers\BetSlipController;
 use App\Http\Controllers\BetCheckController;
 use App\Http\Controllers\BannerInfoController;
 use App\Http\Controllers\TipsController;
+use App\Http\Controllers\NotiController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -49,7 +51,8 @@ Route::get('/dtwod/search/{date}', [TwoDController::class, 'search']);
 Route::get('/dthreed', [ThreeDController::class, 'index']);
 Route::get('/dthreed/{year}/{weekno}', [ThreeDController::class, 'weeknumber']);
 Route::get('/dthreed/{id}', [ThreeDController::class, 'show']);
-Route::get('/dthreed/search/{date}', [ThreeDController::class, 'search']);
+Route::get('/version', [ThreeDController::class, 'getVersion']);
+Route::get('/dthreed/search/date/{name}', [ThreeDController::class, 'search']);
 Route::get('/thaithreed', [ThaiThreeDController::class, 'index']);
 Route::get('/thaithreed/{id}', [ThaiThreeDController::class, 'show']);
 Route::get('/thaithreed/search/{date}', [ThaiThreeDController::class, 'search']);
@@ -104,7 +107,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/paymentinfo/search/{name}', [PaymentController::class, 'search']);
     Route::post('/betslip', [BetSlipController::class, 'store']);
     Route::get('/betslip', [BetSlipController::class, 'index']);
-    Route::get('/betslip/search/{userid}', [BetSlipController::class, 'index']);
+    Route::get('/betslip/search/{userid}', [BetSlipController::class, 'search']);
     Route::post('/referral', [ReferralController::class, 'store']);
     Route::get('/referral/check/{submitid}', [ReferralController::class, 'check_submit']);
     Route::get('/referral', [ReferralController::class, 'index']);
@@ -120,6 +123,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/updatedstep2/phone/{id}', [UserAuthController::class, 'updatePhone2']);
     Route::post('/upgrade/{id}', [TransactionController::class, 'upgrade']);
     Route::get('/adminpayment', [PaymentController::class, 'adminPayment']);
+    Route::get('/noti/user/{id}',[NotiController::class,'showbyUserId']);
 
 
 });

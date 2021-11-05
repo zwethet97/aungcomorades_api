@@ -72,7 +72,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $betslip['selected-total-number'] }}</td>
                       <td>{{ $betslip['total-bet-amount'] }}</td>
                       <td>{{ $betslip['status'] }}</td>
-
                       <td>
                           <a href="{{ route('betslips.show', $betslip->id) }}" class="btn btn-sm btn-success" role="button">View Detail</a>
                             <!-- <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $betslip->id }}').submit()">
@@ -122,7 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="{{ asset('js/app.js') }}" ></script>
- <script src="http://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js">
+ <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js">
     </script>
 <script>
     $(document).ready( function () {

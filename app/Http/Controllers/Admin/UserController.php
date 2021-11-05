@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\NormalUser;
+use App\Models\BetSlip;
+use App\Models\Transaction;
+use App\Models\Referrals;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -14,6 +17,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {   
         $todaysilver = NormalUser::where('user-level','silver')
@@ -28,6 +36,37 @@ class UserController extends Controller
         ]);
     }
 
+    public function showUserBetslip($id){
+
+        return view('admin.users.betslip',[
+            'betslips' => BetSlip::where('userId',$id)->get(),
+            'user' => NormalUser::where('id',$id)->first()
+        ]);
+    }
+    public function showUserTransaction($id){
+
+        return view('admin.users.transaction',[
+            'transactions' => Transaction::where('userId',$id)->get(),
+            'user' => NormalUser::where('id',$id)->first()
+        ]);
+    }
+    public function showUserReferral($name){
+
+        $referrals = Referrals::where('referral-code',$name)->get();
+
+        $ref = [];
+        foreach($referrals as $referral)
+        {
+            $ref[] = NormalUser::where('id',$referral['submitted-userId'])->first();
+        }
+
+        return view('admin.users.referral',[
+            'referrals' => $ref,
+            'user' => NormalUser::where('referral-code',$name)->first()
+        ]);
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.

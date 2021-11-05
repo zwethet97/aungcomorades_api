@@ -45,23 +45,45 @@ class TransactionController extends Controller
             'userId' => $fields['userId'],
             'platform' => $fields['platform'],
             'accountnumber' => $fields['accountnumber'],
-            'status' => 'deposit',
+            'status' => 'deposit_req',
             'amount' => $fields['amount'],
             'transferuserId' => '-',
             'screen-shot' => $imageName
         ]);
+
+        
 
         $changeamount = NormalUser::find($fields['userId']);
         $existingamount = $changeamount->credits;
         // $changeamount->update([
         //     'credits' => $existingamount + $fields['amount']
         // ]);
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      "09777870090",
+            "message"   =>      $fields['amount']."Credits. Deposit request receive from".$fields['platform']." ".$fields['accountnumber']."(".$changeamount['phone-number'].")",
+            "sender"    =>      "Aung Pwal"
+        ];
         
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+
         Noti::insert([
             'description' => 'Your Deposit Request is currently is on progress. Please wait for Admin Response',
             'userId' => $fields['userId'],
             'type' => 'transaction',
-            'id' => $deposit->id
+            'typeid' => $deposit->id
         ]);
 
         return response([ 
@@ -92,8 +114,6 @@ class TransactionController extends Controller
             ], 200);
         }
 
-        
-
         $changeamount->update([
             'credits' => $existingamount - $fields['amount']
         ]);
@@ -103,7 +123,7 @@ class TransactionController extends Controller
             'userId' => $fields['userId'],
             'platform' => $fields['platform'],
             'accountnumber' => $fields['accountnumber'],
-            'status' => 'withdraw',
+            'status' => 'withdraw_req',
             'amount' => $fields['amount'],
             'transferuserId' => '-',
             'screen-shot' => '-'
@@ -113,9 +133,32 @@ class TransactionController extends Controller
             'description' => 'Your Withdraw Request is currently is on progress. Please wait for Admin Response',
             'userId' => $fields['userId'],
             'type' => 'transaction',
-            'id' => $withdraw->id
+            'typeid' => $withdraw->id
         ]);
         
+        $changeamount = NormalUser::find($fields['userId']);
+
+        $token = "_tGnrDluQo1JOqyLaILa-fTlozduLX5fW-JvtdDT4xW4OE2bDC_67DeBTYAe9fhl";
+
+        // Prepare data for POST request
+        $data = [
+            "to"        =>      "09777870090",
+            "message"   =>      $fields['amount']."Credits. Withdraw request receive from".$fields['platform']." ".$fields['accountnumber']."(".$changeamount['phone-number'].")",
+            "sender"    =>      "Aung Pwal"
+        ];
+        
+        
+        $ch = curl_init("https://smspoh.com/api/v2/send");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+        
+        $result = curl_exec($ch);
+
         return response([ 
             'success' => true,
             'message' => 'Withdrawl Successfully',
@@ -167,17 +210,35 @@ class TransactionController extends Controller
             'userId' => $fields['userId'],
             'platform' => '-',
             'accountnumber' => '-',
-            'status' => 'transfer',
+            'status' => 'transferout',
             'amount' => $fields['amount'],
             'transferuserId' => $fields['transferuserId'],
             'screen-shot' => '-'
+        ]);
+
+        $transferin = Transaction::create([
+
+            'userId' => $transferUser->id,
+            'platform' => '-',
+            'accountnumber' => '-',
+            'status' => 'transferin',
+            'amount' => $fields['amount'],
+            'transferuserId' => $changeamount['phone-number'],
+            'screen-shot' => '-'
+        ]);
+
+        Noti::insert([
+            'description' => 'You receive '.$fields['amount'].' from '.$changeamount['phone-number'],
+            'userId' => $transferUser->id,
+            'type' => 'transaction',
+            'typeid' => $transferin->id
         ]);
 
         Noti::insert([
             'description' => 'Amount '.$fields['amount'].'is successfully to transfer to '.$fields['transferuserId'],
             'userId' => $fields['userId'],
             'type' => 'transaction',
-            'id' => $transfer->id
+            'typeid' => $transfer->id
         ]);
 
         return response([ 
@@ -192,7 +253,7 @@ class TransactionController extends Controller
         $userId = NormalUser::where('id',$id)->first();
         $existingCredit = $userId->credits;
         
-        if ($userId['user-level'] != 'normal')
+        if ($userId['user-level'] != 'free')
         {  
             return response([ 
                 'success' => false,
@@ -265,7 +326,10 @@ class TransactionController extends Controller
         return response([ 
             'success' => true,
             'message' => 'Data Found',
-            'data' => Transaction::where('userId', 'like', '%'.$name.'%')->get()
+            'data' => Transaction::where('userId', 'like', '%'.$name.'%')
+                                    ->whereNotIn('status', ['deposit_req','withdraw_req'])
+                                    ->orderBy('created_at','desc')
+                                    ->get()
         ], 200);
     }
     public function searchtransferUserPhone($name)
