@@ -15,6 +15,7 @@ use App\Http\Controllers\BetCheckController;
 use App\Http\Controllers\BannerInfoController;
 use App\Http\Controllers\TipsController;
 use App\Http\Controllers\NotiController;
+use App\Http\Controllers\RewardController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -94,6 +95,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/thaithreed/{id}', [ThaiThreeDController::class, 'update']);
     Route::delete('/thaithreed/{id}', [ThaiThreeDController::class, 'destroy']);
     Route::post('/logout', [UserAuthController::class, 'logout']);
+    Route::get('/check/role/{id}', [UserAuthController::class, 'checkRole']);
     //Route::post('/normal-user', [UserAuthController::class, 'store']);
     Route::get('/transaction', [TransactionController::class, 'index']);
     Route::get('/transaction/search/{userid}', [TransactionController::class, 'search']);
@@ -106,12 +108,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/paymentinfo/delete/{id}', [PaymentController::class, 'destroy']);
     Route::get('/paymentinfo/search/{name}', [PaymentController::class, 'search']);
     Route::post('/betslip', [BetSlipController::class, 'store']);
+    Route::post('/limit/check', [BetSlipController::class, 'checkBet']);
+    Route::post('/limit/d3d/check', [BetSlipController::class, 'check3dBet']);
     Route::get('/betslip', [BetSlipController::class, 'index']);
     Route::get('/betslip/search/{userid}', [BetSlipController::class, 'search']);
     Route::post('/referral', [ReferralController::class, 'store']);
     Route::get('/referral/check/{submitid}', [ReferralController::class, 'check_submit']);
     Route::get('/referral', [ReferralController::class, 'index']);
     Route::get('/referral/list/{code}', [ReferralController::class, 'show']);
+    Route::get('/reward/list/{id}', [RewardController::class, 'show']);
     Route::get('/referral/search/{name}', [ReferralController::class, 'search']);
     Route::get('/normal-user', [UserAuthController::class, 'index']);
     Route::get('/normal-user/show/{id}', [UserAuthController::class, 'show']);
@@ -124,6 +129,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/upgrade/{id}', [TransactionController::class, 'upgrade']);
     Route::get('/adminpayment', [PaymentController::class, 'adminPayment']);
     Route::get('/noti/user/{id}',[NotiController::class,'showbyUserId']);
+    Route::get('/submit/check/{id}',[ReferralController::class,'checkSubmit']);
 
 
 });

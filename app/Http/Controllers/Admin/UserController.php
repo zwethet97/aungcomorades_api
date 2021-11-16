@@ -9,6 +9,9 @@ use App\Models\Referrals;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -29,10 +32,11 @@ class UserController extends Controller
                                 ->count();
 
         return view('admin.users.index',[
-            'users' => NormalUser::where('verified_otp',1)->paginate(3),
+            'users' => NormalUser::where('verified_otp',1)->get(),
             'todayusers' => NormalUser::whereDate('created_at', Carbon::today())->count(),
             'todaysilver' => $todaysilver,
-            'total' => NormalUser::where('verified_otp',1)->count()
+            'total' => NormalUser::where('verified_otp',1)->count(),
+            'totalAmount' => NormalUser::all()->sum('credits')
         ]);
     }
 
@@ -66,7 +70,66 @@ class UserController extends Controller
         ]);
     }
 
-    
+    public function depoUpdate(Request $request,$id)
+    {   
+        $request->validate([
+            'password' => 'required' 
+         ]);
+ 
+         $admin = User::where('id','1')->first();
+         
+         if (!Hash::check($request->password,$admin->password))
+         {
+             return back()->with('message','Password is not correct');
+         }
+        
+        $user = NormalUser::where('id',$id)->first();
+        Transaction::insert([
+            'userId' => $id,
+            'platform' => '-',
+            'accountnumber' => '-',
+            'screen-shot' => '-',
+            'status' => 'deposit',
+            'transferuserId' => '-',
+            'amount' => $request['amount']
+        ]);
+        $user->update([
+            'credits' => $user->credits + $request['amount']
+        ]);
+
+        return back()->with('message',"Successfully Deposit");
+    }
+
+    public function withdrawUpdate(Request $request,$id)
+    {   
+        $request->validate([
+            'password' => 'required' 
+         ]);
+ 
+         $admin = User::where('id','1')->first();
+         
+         if (!Hash::check($request->password,$admin->password))
+         {
+             return back()->with('message','Password is not correct');
+         }
+        
+        $user = NormalUser::where('id',$id)->first();
+        Transaction::insert([
+
+            'userId' => $id,
+            'platform' => '-',
+            'accountnumber' => '-',
+            'screen-shot' => '-',
+            'status' => 'withdraw',
+            'transferuserId' => '-',
+            'amount' => $request['amount']
+        ]);
+        $user->update([
+            'credits' => $user->credits - $request['amount']
+        ]);
+
+        return back()->with('message',"Successfully Withdraw");
+    }
 
     /**
      * Show the form for creating a new resource.

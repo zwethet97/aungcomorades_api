@@ -13,9 +13,11 @@ class BetSlip extends Model
         'forDate',
         'forTime',
         'type',
-        'bet-numbers',
         'total-bet-amount',
         'status',
-        'selected-total-number'
+        'selected-total-number',
+        'win_number',
+        'referral',
+        'reward'
     ];
 }

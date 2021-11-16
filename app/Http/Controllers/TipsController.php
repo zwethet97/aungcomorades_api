@@ -24,6 +24,7 @@ class TipsController extends Controller
         $soccerTips = SoccerTips::all();
 
         $tips = [
+            'Banner' => TipBanner::all(),
             '2D Tips' => $twodTips,
             'Soccer Tips' => $soccerTips
         ];

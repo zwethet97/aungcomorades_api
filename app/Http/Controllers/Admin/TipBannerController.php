@@ -16,7 +16,7 @@ class TipBannerController extends Controller
     {
         $banners = TipBanner::all();
 
-        return view('admin.info.index',[
+        return view('admin.tipbanner.index',[
             'banners' => $banners
         ]);
         

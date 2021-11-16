@@ -135,7 +135,7 @@ public function checkTime(){
 
         if( $UserTime->gt($EveningLimit) )
         {
-            if ( Carbon::tomorrow('Asia/Yangon')->format('d.m.Y') == $Closed )
+            if ( Carbon::tomorrow('Asia/Yangon')->format('d.m.Y') == $Closed || Carbon::tomorrow('Asia/Yangon')->isWeekend())
             {
                 return response([
                     'success' => false,
@@ -235,6 +235,7 @@ public function checkTime(){
                 'data' => (object)[]
             ],200);
         }
+        
       }
       else
       {

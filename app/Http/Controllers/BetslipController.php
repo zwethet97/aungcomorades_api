@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 use App\Models\BetSlip;
 use App\Models\BetInteger;
+use App\Models\BetLimit;
 use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 
 
 class BetSlipController extends Controller
@@ -42,7 +43,135 @@ class BetSlipController extends Controller
             'message' => $betDetail
         ],201);
     }
+    public function checkBet(Request $request)
+    {   
+        $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
+        $fields = $request->validate([
+            'userId' => 'required',
+            'date' => 'required',
+            'time' => 'required'
+        ]);
+        
+        $limit_amount = BetLimit::where('id',1)->value('limit');
+        $limit50 = $limit_amount - 50;
+        $betintegers = $request->betinteger;
+        $notavail = [];
+        $availamt = [];
+        $avail = [];
 
+        foreach ($betintegers as $betinteger)
+        {
+            $check_amt = BetSlip::where('bet_slips.forDate', '=',$request->date)
+                                ->where('bet_slips.forTime','=',$request->time)
+                                ->where('bet_slips.type','=','D2D')
+                                ->join('bet_integers','bet_slips.id','=','bet_integers.bet-slip-id')
+                                ->where('bet_integers.integer','=',$betinteger['integer'])
+                                ->sum('bet_integers.amount');
+
+            $stage_one = $check_amt + $betinteger['amount'];
+            
+            if ( $check_amt > $limit50  || $betinteger['amount'] >= $limit_amount )
+            {
+                $notavail[] = $betinteger['integer'];
+            }
+            elseif( $stage_one > $limit50 ) 
+            {  
+                $availamt[] = [
+                    'number' => $betinteger['integer'],
+                    'available amount' => $limit50 - $check_amt 
+                ];
+            }
+            else
+            {
+                $avail[] = [
+                    'number' => $betinteger['integer'],
+                    'amount' => $betinteger['amount']
+                ];
+            }
+
+        }
+        
+        $status = [
+                'Not Available Number' => $notavail,
+                'Only Available Amount' => $availamt,
+                'Available' => $avail
+            ];
+            
+        // if ( empty($notavail) && empty($availamt) )
+        //     {
+        //         return true;
+        //     }
+            return response([
+                'success' => true,
+                'message' => 'Available & Not Available No.',
+                'data' => $status
+            ],200);  
+    }
+
+    public function check3dBet(Request $request)
+    {   
+        $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
+        $fields = $request->validate([
+            'userId' => 'required',
+            'date' => 'required',
+            'time' => 'required'
+        ]);
+        
+        $limit_amount = BetLimit::where('id',1)->value('limit');
+        $limit50 = $limit_amount - 50;
+        $betintegers = $request->betinteger;
+        $notavail = [];
+        $availamt = [];
+        $avail = [];
+
+        foreach ($betintegers as $betinteger)
+        {
+            $check_amt = BetSlip::where('bet_slips.forDate', '=',$request->date)
+                                ->where('bet_slips.forTime','=',$request->time)
+                                ->where('bet_slips.type','=','D3D')
+                                ->join('bet_integers','bet_slips.id','=','bet_integers.bet-slip-id')
+                                ->where('bet_integers.integer','=',$betinteger['integer'])
+                                ->sum('bet_integers.amount');
+
+            $stage_one = $check_amt + $betinteger['amount'];
+            
+            if ( $check_amt > $limit50  || $betinteger['amount'] >= $limit_amount )
+            {
+                $notavail[] = $betinteger['integer'];
+            }
+            elseif( $stage_one > $limit50 ) 
+            {  
+                $availamt[] = [
+                    'number' => $betinteger['integer'],
+                    'available amount' => $limit50 - $check_amt 
+                ];
+            }
+            else
+            {
+                $avail[] = [
+                    'number' => $betinteger['integer'],
+                    'amount' => $betinteger['amount']
+                ];
+            }
+
+        }
+        
+        $status = [
+                'Not Available Number' => $notavail,
+                'Only Available Amount' => $availamt,
+                'Available' => $avail
+            ];
+            
+        // if ( empty($notavail) && empty($availamt) )
+        //     {
+        //         return true;
+        //     }
+            return response([
+                'success' => true,
+                'message' => 'Available & Not Available No.',
+                'data' => $status
+            ],200);  
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -57,7 +186,6 @@ class BetSlipController extends Controller
             'forDate' => 'required',
             'forTime' => 'required',
             'type' => 'required',
-            'bet-numbers' => 'required',
             'selected-total-number' => 'required'
         ]);
 
@@ -65,8 +193,8 @@ class BetSlipController extends Controller
         {
             return response([
                 'success' => false,
-                'data' => 'Do not enough credits',
-                'message' => []
+                'message' => 'Do not enough credits',
+                'data' => []
             ],200); 
         }
         
@@ -77,9 +205,9 @@ class BetSlipController extends Controller
             'forDate' => $fields['forDate'],
             'forTime' => $fields['forTime'],
             'type' => $fields['type'],
-            'bet-numbers' => $fields['bet-numbers'],
             'selected-total-number' => $fields['selected-total-number'],
             'status' => 'ongoing',
+            'win_number' => 'ongoing',
             'referral' => '0',
             'reward' => '0'
         ]);
@@ -164,7 +292,7 @@ class BetSlipController extends Controller
             ],200);
         }
 
-        $betslips = BetSlip::where('userId', 'like', '%'.$name.'%')->get();
+        $betslips = BetSlip::where('userId', 'like', '%'.$name.'%')->orderBy('id','DESC')->get();
         $betintegers = [];
 
         foreach($betslips as $betslip)

@@ -98,7 +98,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+            <li class="nav-item">
                 <a href="{{ url('/admin/compensate') }}" class="nav-link {{ Request::is('admin/compensate') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>D3D Compensate</p>
@@ -147,6 +147,14 @@
               <i class="far fa-circle nav-icon"></i>
               <p>
                 Tip Banner
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('/admin/compensate/number') }}" class="nav-link {{ Request::is('admin/compensate/number') ? 'active' : '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Limit/Win Number
               </p>
             </a>
           </li>

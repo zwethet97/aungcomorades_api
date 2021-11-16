@@ -30,6 +30,101 @@ class UserAuthController extends Controller
         }
         return $randomString;
     }
+
+    public function checkRole($id)
+    {
+        $fields = NormalUser::where('id',$id)->first();
+        $referralrole = $fields['user-level'];
+
+        if ( $referralrole == 'silver' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 10 )
+            {
+                $fields->update([
+                    'user-level' => 'gold'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'gold' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 30 )
+            {
+                $fields->update([
+                    'user-level' => 'diamond'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'diamond' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 50 )
+            {
+                $fields->update([
+                    'user-level' => 'jade'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'jade' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 100 )
+            {
+                $fields->update([
+                    'user-level' => 'ruby'
+                ]);
+            }
+        }
+        
+        return response([
+            'success' => true,
+            'message' => 'checking role'
+            ]);
+    }
     /**
      * Store a newly created resource in storage.
      *

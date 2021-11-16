@@ -60,7 +60,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <h3><span class="badge bg-secondary">D2D Bets</span></h3>
         <div class="row">
           
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -85,11 +85,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Bet Integer</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                      @foreach($midLows as $midLow)
+                      <tr>
+                        <td>{{ $midLow['integer'] }}</td>
+                        <td>{{ $midLow['amount'] }}</td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <div class="col-3">
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap" >
                   <thead>
                     <tr>
                       <th>Bet Integer</th>
@@ -110,7 +135,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -138,9 +163,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <hr>
         <h3><span class="badge bg-secondary">D3D Bets</span></h3>
+
         <div class="row">
           
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -165,11 +191,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Bet Integer</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                      @foreach($midLow3s as $midLow3)
+                      <tr>
+                        <td>{{ $midLow3['integer'] }}</td>
+                        <td>{{ $midLow3['amount'] }}</td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <div class="col-3">
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap" >
                   <thead>
                     <tr>
                       <th>Bet Integer</th>
@@ -190,7 +241,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <div class="card">
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -262,7 +313,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			todayHighlight: true,
 			autoclose: true,
 		})
-	})
+	});
+
+  $('th').click(function(){
+    var table = $(this).parents('table').eq(0)
+    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+    this.asc = !this.asc
+    if (!this.asc){rows = rows.reverse()}
+    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+})
+function comparer(index) {
+    return function(a, b) {
+        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+    }
+}
+function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+
 </script>
 </body>
 </html>

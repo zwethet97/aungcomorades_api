@@ -105,9 +105,7 @@ class TipController extends Controller
             'bannerImageThree' => $bannerThreeName,
             'imageOneDescription' => $request->descriptionOne,
             'imageTwoDescription' => $request->descriptionTwo,
-            'imageThreeDescription' => $request->descriptionThree,
-            'date' => $request->date,
-            'result' => $request->result
+            'imageThreeDescription' => $request->descriptionThree
         ]);
 
         return back()->with('message','Tip Record Added!');

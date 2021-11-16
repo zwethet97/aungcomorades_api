@@ -115,10 +115,10 @@ class Kernel extends ConsoleKernel
         
         $result = curl_exec($ch);
 
-        $noti_token = "MjU1MTBhMjMtY2RmMi00NzU4LTliZGUtZWQwYzViNWUxMDNk";
+        $noti_token = "NjM1N2RjOTItNTIxMS00NDlhLTk3OTgtNWU5YjY3OTA3YmU2";
 
         $contents = [
-            'en' => '12:01 PM Win Number is'.$threed
+            'en' => '12:01 PM Win Number is '.$threed
         ];
 
         $headings = [
@@ -130,7 +130,7 @@ class Kernel extends ConsoleKernel
         ];
 
         $noti_data = [
-            'app_id' => 'e6748a7e-69c4-4f58-bc2f-36eaa11ecbb2',
+            'app_id' => '5704f741-15dc-4b81-98f6-728b545b24c7',
             'included_segments' => 'Subscribed Users',
             'data' => $data2,
             'headings' => $headings,
@@ -246,7 +246,7 @@ class Kernel extends ConsoleKernel
         
         $result = curl_exec($ch);
 
-        $noti_token = "MjU1MTBhMjMtY2RmMi00NzU4LTliZGUtZWQwYzViNWUxMDNk";
+        $noti_token = "NjM1N2RjOTItNTIxMS00NDlhLTk3OTgtNWU5YjY3OTA3YmU2";
 
         $contents = [
             'en' => '4:30 PM Win Number is'.$threed
@@ -261,7 +261,7 @@ class Kernel extends ConsoleKernel
         ];
 
         $noti_data = [
-            'app_id' => 'e6748a7e-69c4-4f58-bc2f-36eaa11ecbb2',
+            'app_id' => '5704f741-15dc-4b81-98f6-728b545b24c7',
             'included_segments' => 'Subscribed Users',
             'data' => $data2,
             'headings' => $headings,

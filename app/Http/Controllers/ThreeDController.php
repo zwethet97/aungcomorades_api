@@ -190,7 +190,7 @@ public function checkTime(){
 
         if( $UserTime->gt($EveningLimit) )
         {
-            if ( Carbon::tomorrow('Asia/Yangon')->format('d.m.Y') == $Closed )
+            if ( Carbon::tomorrow('Asia/Yangon')->format('d.m.Y') == $Closed || Carbon::tomorrow('Asia/Yangon')->isWeekend() )
             {
                 return response([
                     'success' => false,
@@ -215,13 +215,13 @@ public function checkTime(){
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '11:30 PM',
-                'forTime' => $NoonLimit
+                'forTime' => '12:01 PM'
             ];
 
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => $UserTime
+                'forTime' => '4:31 PM'
             ];
 
             $avail = [
@@ -260,7 +260,7 @@ public function checkTime(){
         {
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '11:30 PM',
+                'limited' => '11:30 AM',
                 'forTime' => '12:01 PM'
             ];
 
@@ -282,7 +282,7 @@ public function checkTime(){
                 'data' => $avail
             ],200);
         }
-        elseif ( $UserTime->gt($EveningLimit) && Carbon::tomorrow('Asia/Yangon')->isWeekend())
+        elseif ( Carbon::tomorrow('Asia/Yangon')->isWeekend()  || $UserTime->gt($EveningLimit) )
         {
             return response([
                 'success' => false,

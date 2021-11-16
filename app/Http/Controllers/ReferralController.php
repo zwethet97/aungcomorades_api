@@ -39,7 +39,26 @@ class ReferralController extends Controller
         $checkreferral = NormalUser::where('referral-code', $fields['referral-code'])->first();
         $checksubmitted = NormalUser::where('id', $fields['submitted-userId'])->value('referral-code');
         $referralrole = NormalUser::where('referral-code', $fields['referral-code'])->value('user-level');
-        $referralrolecount = Referrals::where('referral-code', $fields['referral-code'])->count();
+
+        
+        $checksubmitted_user = NormalUser::where('id', $fields['submitted-userId'])->first();
+        
+        $checksubmitted_referrals = Referrals::where('referral-code',$checksubmitted_user['referral-code'])->get();
+        
+        foreach($checksubmitted_referrals as $check){
+            
+            $old_submit = NormalUser::where('id',$check['submitted-userId'])->first();
+            
+            if ($old_submit['referral-code'] == $fields['referral-code'])
+            {
+                return response([
+                'success'  => false,
+                'message' => "You can't submit your own referrals.",
+                'data' => ''
+            ], 201);
+                
+            }
+        }
 
         if( !$checkreferral || $checksubmitted == $fields['referral-code'] ){
             return response([
@@ -48,39 +67,99 @@ class ReferralController extends Controller
                 'data' => ''
             ], 201);
         }
-
-        if ( $referralrole == 'silver' || $referralrolecount >= 10 )
-        {
-            $checkreferral->update([
-                'user-level' => 'gold'
-            ]);
-        }
-
-        if ( $referralrole == 'gold' || $referralrolecount >= 30 )
-        {
-            $checkreferral->update([
-                'user-level' => 'diamond'
-            ]);
-        }
-
-        if ( $referralrole == 'diamond' || $referralrolecount >= 50 )
-        {
-            $checkreferral->update([
-                'user-level' => 'jade'
-            ]);
-        }
-
-        if ( $referralrole == '' || $referralrolecount >= 100 )
-        {
-            $checkreferral->update([
-                'user-level' => 'ruby'
-            ]);
-        }
-
+        
+                
         $referral = Referrals::create([
             'referral-code' => $fields['referral-code'],
             'submitted-userId' => $fields['submitted-userId']
         ]);
+        
+        $referralrolecount = Referrals::where('referral-code', $fields['referral-code'])->count();
+        
+
+        if ( $referralrole == 'silver' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 10 )
+            {
+                $checkreferral->update([
+                    'user-level' => 'gold'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'gold' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 11 )
+            {
+                $checkreferral->update([
+                    'user-level' => 'diamond'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'diamond' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 12 )
+            {
+                $checkreferral->update([
+                    'user-level' => 'jade'
+                ]);
+            }
+        }
+
+        if ( $referralrole == 'jade' )
+        {   
+            $count = 0;
+            $referral_crs = Referrals::where('referral-code',$fields['referral-code'])->get();
+
+            foreach($referral_crs as $referral_cr)
+            {
+                if(NormalUser::where('id', $referral_cr['submitted-userId'])->where('user-level','!=','free')->first())
+                {
+                    $count += 1;
+                }
+            }
+
+            if ($count >= 100 )
+            {
+                $checkreferral->update([
+                    'user-level' => 'ruby'
+                ]);
+            }
+        }
 
         return response([
             'success' => true,
@@ -156,7 +235,7 @@ class ReferralController extends Controller
     }
     public function search($name)
     {   
-        if (!Referrals::where('referral-code', 'like', '%'.$name.'%')->first()) 
+        if (!NormalUser::where('referral-code', 'like', '%'.$name.'%')->first()) 
         {
             return response([
                 'success' => false,
@@ -171,5 +250,22 @@ class ReferralController extends Controller
             'message' => 'Data Found',
             'data' => NormalUser::where('referral-code', 'like', '%'.$name.'%')->get()
         ],200);
+    }
+    public function checkSubmit($id)
+    {
+        if (Referrals::where('submitted-userId',$id)->first())
+        {
+            return response([
+                'success' => false,
+                'message' => 'Already submitted Referral',
+                'data' => []
+            ],200);
+        }
+        
+        return response([
+                'success' => true,
+                'message' => 'You can submit',
+                'data' => []
+            ],200);
     }
 }

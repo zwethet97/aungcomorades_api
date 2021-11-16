@@ -79,6 +79,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h3>{{ $winNumberNoon }}</h3>
 
                 <p>Morning Win Number</p>
+                @if($winNumberNoon)
+                <h2><span class="badge bg-secondary">{{ $winNumberNoon1 }}</span> <span class="badge bg-secondary">{{ $winNumberNoon2 }}</span>  <span class="badge bg-secondary">{{ $winNumberNoon3 }}</span>  <span class="badge bg-secondary">{{ $winNumberNoon4 }}</span>  <span class="badge bg-secondary">{{ $winNumberNoon5 }}</span>  <span class="badge bg-secondary">{{ $winNumberNoon6 }}</span>  <span class="badge bg-secondary">{{ $winNumberNoon7 }}</span> </h2>
+                @endif
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -93,6 +96,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h3>{{ $winNumberEven }}</h3>
 
                 <p>Evening Win Number</p>
+                @if($winNumberEven)
+                <h2><span class="badge bg-secondary">{{ $winNumberEven1 }}</span> <span class="badge bg-secondary">{{ $winNumberEven2 }}</span>  <span class="badge bg-secondary">{{ $winNumberEven3 }}</span>  <span class="badge bg-secondary">{{ $winNumberEven4 }}</span>  <span class="badge bg-secondary">{{ $winNumberEven5 }}</span>  <span class="badge bg-secondary">{{ $winNumberEven6 }}</span>  <span class="badge bg-secondary">{{ $winNumberEven7 }}</span> </h2>
+                @endif
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>

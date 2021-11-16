@@ -6,6 +6,7 @@ use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Noti;
+use App\Models\Rewards;
 
 
 class TransactionController extends Controller
@@ -322,14 +323,18 @@ class TransactionController extends Controller
         return Transaction::destroy($id);
     }
     public function search($name)
-    {
+    {   
+        $data = [
+            'transactions' => Transaction::where('userId', 'like', '%'.$name.'%')
+                                    ->whereNotIn('status', ['deposit_req','withdraw_req'])
+                                    ->orderBy('created_at','desc')
+                                    ->get(),
+            'reward' => Rewards::where('userId',$name)->get()
+            ];
         return response([ 
             'success' => true,
             'message' => 'Data Found',
-            'data' => Transaction::where('userId', 'like', '%'.$name.'%')
-                                    ->whereNotIn('status', ['deposit_req','withdraw_req'])
-                                    ->orderBy('created_at','desc')
-                                    ->get()
+            'data' => $data
         ], 200);
     }
     public function searchtransferUserPhone($name)

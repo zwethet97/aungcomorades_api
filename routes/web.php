@@ -30,6 +30,8 @@ Route::prefix('admin')->group(function(){
      Route::get('/users/betslip/{id}',[App\Http\Controllers\Admin\UserController::class,'showUserBetslip'])->name('users.betslip');
      Route::get('/users/transaction/{id}',[App\Http\Controllers\Admin\UserController::class,'showUserTransaction'])->name('users.transaction');
      Route::get('/users/referral/{name}',[App\Http\Controllers\Admin\UserController::class,'showUserReferral'])->name('users.referral');
+     Route::post('/users/deposit/{id}',[App\Http\Controllers\Admin\UserController::class,'depoUpdate'])->name('users.deposit.update');
+     Route::post('/users/withdraw/{id}',[App\Http\Controllers\Admin\UserController::class,'withdrawUpdate'])->name('users.withdraw.update');
      Route::get('/transaction/deposit',[App\Http\Controllers\Admin\TransactionController::class,'deposit'])->name('transaction.deposit');
      Route::post('/transaction/deposit/update/{id}',[App\Http\Controllers\Admin\TransactionController::class,'depoUpdate'])->name('transaction.deposit.update');
      Route::get('/transaction/withdraw',[App\Http\Controllers\Admin\TransactionController::class,'withdraw'])->name('transaction.withdraw');
@@ -40,6 +42,9 @@ Route::prefix('admin')->group(function(){
      Route::post('/compensate/threed',[App\Http\Controllers\Admin\CompensateController::class,'compensateThreed'])->name('compensate.threed');
      Route::post('/compensate/threed/round',[App\Http\Controllers\Admin\CompensateController::class,'roundCompensate'])->name('compensate.threed.round');
      Route::get('/compensate/twodview',[App\Http\Controllers\Admin\CompensateController::class,'twodindex'])->name('compensate.twodview');
+     Route::get('/compensate/number',[App\Http\Controllers\Admin\CompensateController::class,'winNumber'])->name('compensate.number');
+     Route::post('/compensate/number/{id}',[App\Http\Controllers\Admin\CompensateController::class,'winUpdate'])->name('compensate.number.update');
+     Route::post('/compensate/limit/{id}',[App\Http\Controllers\Admin\CompensateController::class,'limitUpdate'])->name('compensate.limit.update');
      Route::post('/compensate/twod',[App\Http\Controllers\Admin\CompensateController::class,'compensateTwod'])->name('compensate.twod');
      Route::resource('/tips',App\Http\Controllers\Admin\TipController::class);
      Route::post('/tips',[App\Http\Controllers\Admin\TipController::class,'createTipProfile'])->name('tips.create');

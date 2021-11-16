@@ -47,16 +47,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-            @if(session()->has('message'))
-    <div class="alert alert-success">
-        {{ session()->get('message') }}
-    </div>
-@endif
-        @if($errors->any())
-        <div class="alert alert-danger" role="alert">
-            {{$errors->first()}}
-        </div>
+                    @if(session()->has('message'))
+            <div class="alert alert-success">
+                {{ session()->get('message') }}
+            </div>
         @endif
+                @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    {{$errors->first()}}
+                </div>
+                @endif
 </div>
         </div>
         <div class="row">
@@ -112,7 +112,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-primary">Deposit Now</button>
+                                  <button type="submit" class="btn btn-primary">Withdraw Now</button>
                                 </div>
                                 </form>
                               </div>
