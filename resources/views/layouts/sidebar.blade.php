@@ -44,7 +44,19 @@
               <li class="nav-item">
                 <a href="{{ url('/home') }}" class="nav-link {{ Request::is('home') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Main</p>
+                  <p>D2D & D3D</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/betdetail/twodplus') }}" class="nav-link {{ Request::is('betdetail/twodplus') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>2DPLUS</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/betdetail/internet') }}" class="nav-link {{ Request::is('betdetail/internet') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>INTERNET</p>
                 </a>
               </li>
             </ul>
@@ -116,6 +128,18 @@
                   <p>D2D Compensate</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ url('/admin/compensate/plusview') }}" class="nav-link {{ Request::is('admin/compensate/plusview') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>2D Plus Compensate</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/admin/compensate/internet') }}" class="nav-link {{ Request::is('admin/compensate/internet') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Internet Compensate</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -155,6 +179,14 @@
               <i class="far fa-circle nav-icon"></i>
               <p>
                 Limit/Win Number
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('/admin/payment') }}" class="nav-link {{ Request::is('admin/payment') ? 'active' : '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Admin Payment
               </p>
             </a>
           </li>

@@ -80,13 +80,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $limit['type'] }}</td>
                       <td>{{ $limit['limit'] }}</td>  
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLimit" data-whatever="@mdo">Edit</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLimit{{ $limit['id'] }}" data-whatever="@mdo">Edit</button>
 
-                          <div class="modal fade" id="exampleModalLimit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal fade" id="exampleModalLimit{{ $limit['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabelLimit">Update Limit Amount</h5>
+                                  <h5 class="modal-title" id="exampleModalLabelLimit{{ $limit['id'] }}">Update Limit Amount</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -138,6 +138,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <thead>
                     <tr>
                       <th>D3D</th>
+                      <th>Plus 2D</th>
                       <th>SET</th>
                       <th>VALUE</th>
                       <th>date</th>
@@ -151,6 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 @foreach ($noons as $noon)
                     <tr>
                       <td>{{ $noon['3D'] }}</td>
+                      <td>{{ $noon['plustwod'] }}</td>
                       <td>{{ $noon['set'] }}</td>
                       <td>{{ $noon['value'] }}</td>
                       <td>{{ $noon['date'] }}</td>
@@ -181,6 +183,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                       <input type="text" class="form-control" id="d3d" name="d3d" value="@isset($noon) {{ $noon['3D'] }} @endisset">
                                     </div>
                                     <div class="form-group">
+                                      <label for="set" class="col-form-label">Plus 2D</label>
+                                      <input type="text" class="form-control" id="plustwod" name="plustwod" value="@isset($noon) {{ $noon['plustwod'] }} @endisset">
+                                    </div>
+                                    <div class="form-group">
                                       <label for="set" class="col-form-label">SET</label>
                                       <input type="text" class="form-control" id="set" name="set" value="@isset($noon) {{ $noon['set'] }} @endisset">
                                     </div>
@@ -189,6 +195,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                       <input type="text" class="form-control" id="value" name="value" value="@isset($noon) {{ $noon['value'] }} @endisset">
                                     </div>
                                     
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary">Confirm Now</button>
+                                </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+
+                        </td>
+                    </tr>
+                @endforeach
+                @endif
+                  </tbody>
+                </table>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+              
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap" >
+                  <thead>
+                    <tr>
+                      <th>Internet</th>
+                      <th>date</th>
+                      <th>time</th>
+                      <th><b>Actions</b></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                @if ( $internets )
+                @foreach ($internets as $internet)
+                    <tr>
+                      <td>{{ $internet['internet'] }}</td>
+                      <td>{{ $internet['date'] }}</td>
+                      <td>{{ $internet['time'] }}</td>
+                      
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ $internet['id'] }}" data-whatever="@mdo">Edit</button>
+
+                          <div class="modal fade" id="exampleModal{{ $internet['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel{{ $internet['id'] }}">Update Number</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <form action="{{ route('compensate.internet.update', $internet['id']) }}" method="POST">
+                                  @csrf
+                                  @method('POST')
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                      <label for="password" class="col-form-label">Password</label>
+                                      <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="internet" class="col-form-label">Internet Win Number</label>
+                                      <input type="text" class="form-control" id="internet" name="internet" value="@isset($internet) {{ $internet['internet'] }} @endisset">
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

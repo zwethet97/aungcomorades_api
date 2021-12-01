@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Noti;
 use App\Models\Rewards;
-
+use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -49,7 +49,9 @@ class TransactionController extends Controller
             'status' => 'deposit_req',
             'amount' => $fields['amount'],
             'transferuserId' => '-',
-            'screen-shot' => $imageName
+            'screen-shot' => $imageName,
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
 
         
@@ -64,7 +66,7 @@ class TransactionController extends Controller
         // Prepare data for POST request
         $data = [
             "to"        =>      "09777870090",
-            "message"   =>      $fields['amount']."Credits. Deposit request receive from".$fields['platform']." ".$fields['accountnumber']."(".$changeamount['phone-number'].")",
+            "message"   =>      "[++Deposit++] ".$fields['amount']." Credits. Deposit request receive from ".$fields['platform']." ".$fields['accountnumber']." ( ".$changeamount['phone-number']." )",
             "sender"    =>      "Aung Pwal"
         ];
         
@@ -115,10 +117,6 @@ class TransactionController extends Controller
             ], 200);
         }
 
-        $changeamount->update([
-            'credits' => $existingamount - $fields['amount']
-        ]);
-
         $withdraw = Transaction::create([
 
             'userId' => $fields['userId'],
@@ -127,7 +125,9 @@ class TransactionController extends Controller
             'status' => 'withdraw_req',
             'amount' => $fields['amount'],
             'transferuserId' => '-',
-            'screen-shot' => '-'
+            'screen-shot' => '-',
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
 
         Noti::insert([
@@ -144,7 +144,7 @@ class TransactionController extends Controller
         // Prepare data for POST request
         $data = [
             "to"        =>      "09777870090",
-            "message"   =>      $fields['amount']."Credits. Withdraw request receive from".$fields['platform']." ".$fields['accountnumber']."(".$changeamount['phone-number'].")",
+            "message"   =>      "[--Withdraw--] ".$fields['amount']." Credits. Withdraw request receive from ".$fields['platform']." ".$fields['accountnumber']."( ".$changeamount['phone-number']." )",
             "sender"    =>      "Aung Pwal"
         ];
         
@@ -214,7 +214,9 @@ class TransactionController extends Controller
             'status' => 'transferout',
             'amount' => $fields['amount'],
             'transferuserId' => $fields['transferuserId'],
-            'screen-shot' => '-'
+            'screen-shot' => '-',
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
 
         $transferin = Transaction::create([
@@ -225,7 +227,9 @@ class TransactionController extends Controller
             'status' => 'transferin',
             'amount' => $fields['amount'],
             'transferuserId' => $changeamount['phone-number'],
-            'screen-shot' => '-'
+            'screen-shot' => '-',
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
 
         Noti::insert([
@@ -236,7 +240,7 @@ class TransactionController extends Controller
         ]);
 
         Noti::insert([
-            'description' => 'Amount '.$fields['amount'].'is successfully to transfer to '.$fields['transferuserId'],
+            'description' => 'Amount '.$fields['amount'].' is successfully to transfer to '.$fields['transferuserId'],
             'userId' => $fields['userId'],
             'type' => 'transaction',
             'typeid' => $transfer->id
@@ -324,13 +328,34 @@ class TransactionController extends Controller
     }
     public function search($name)
     {   
+        
+        $userdata = Rewards::where('userId',$name)->where('type','reward')->get();
+        $userReferralTotal = Rewards::where('userId',$name)->where('type','referral')->sum('amount');
+        $userReferrals = Rewards::where('userId',$name)->where('type','referral')->get();
+        $referral = [];
+        foreach ($userReferrals as $userReferral)
+        {
+            $referral[] = [
+                'amount' => $userReferral->amount,
+                'Referral User' => NormalUser::where('id',$userReferral['receive_from'])->first(),
+                'time' => $userReferral->time
+            ];
+        }
+
+        $refer_data = [
+            'reward' => $userdata,
+            'referralTotal' => $userReferralTotal,
+            'referral' => $referral
+        ];
+
         $data = [
             'transactions' => Transaction::where('userId', 'like', '%'.$name.'%')
                                     ->whereNotIn('status', ['deposit_req','withdraw_req'])
                                     ->orderBy('created_at','desc')
                                     ->get(),
-            'reward' => Rewards::where('userId',$name)->get()
+            'reward_referral' => $refer_data
             ];
+            
         return response([ 
             'success' => true,
             'message' => 'Data Found',

@@ -69,11 +69,11 @@ class TipsController extends Controller
 
     public function searchTwoDTodayTips($id)
     {   
-        $today = Carbon::now()->format('d.m.Y');
+        $today = Carbon::now('Asia/Yangon')->format('d.m.Y');
         $dated = todayTips::where('date', 'like', '%'.$today.'%')
                 ->where('tip_id',$id)
                 ->get();
-        if (!todayTips::where('date', 'like', '%'.$today.'%')->first()) 
+        if (!todayTips::where('date', 'like', '%'.$today.'%')->first() || !todayTips::where('tip_id',$id)->first()) 
         {
             return response([
                 'success' => false,
@@ -92,7 +92,7 @@ class TipsController extends Controller
     public function searchSoccerTodayTips($id)
     {   
         
-        $today = Carbon::now()->format('d-m-Y');
+        $today = Carbon::now()->format('d.m-Y');
         $dated = SoccerTodayTips::where('date', 'like', '%'.$today.'%')
                 ->where('soccer_tips_id',$id)
                 ->get();
@@ -141,6 +141,16 @@ class TipsController extends Controller
     public function searchTipsHistory($id)
     {
         $history = TipRecord::where('tip_id',$id)->get();
+        
+        if (!TipRecord::where('id',$id)->first()) 
+        {
+            return response([
+                'success' => false,
+                'message' => 'Data Not Found',
+                'data' => []
+            ],200);
+        }
+        
         return response([
             'success' => true,
             'message' => 'Data Found',

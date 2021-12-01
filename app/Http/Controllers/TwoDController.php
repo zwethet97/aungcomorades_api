@@ -121,7 +121,7 @@ public function checkTime(){
 
         $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,10,30,00, 'Asia/Yangon');
         $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
-        $Closed = Carbon::createFromDate(2021,10,22, 'Asia/Yangon')->format('d.m.Y');
+        $Closed = Carbon::createFromDate(2021,12,10, 'Asia/Yangon')->format('d.m.Y');
         $UserTime = Carbon::now('Asia/Yangon');
         
         if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
@@ -160,13 +160,13 @@ public function checkTime(){
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '11:30 PM',
-                'forTime' => $NoonLimit
+                'forTime' => '12:01 PM'
             ];
 
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => $UserTime
+                'forTime' => '4:31 PM'
             ];
 
             $avail = [
@@ -206,6 +206,142 @@ public function checkTime(){
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '11:30 PM',
+                'forTime' => '12:01 PM'
+            ];
+
+            $eveningTime = [
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:30 PM',
+                'forTime' => '4:31 PM'
+            ];
+
+            $avail = [
+                'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
+                'noonTime' => $noonTime,
+                'eveningTime' => $eveningTime
+            ];
+            return response([
+                'success' => true,
+                'message' => 'Available Betting Time',
+                'data' => $avail
+            ],200);
+        }
+        elseif ( $UserTime->gt($EveningLimit) && Carbon::tomorrow('Asia/Yangon')->isWeekend())
+        {
+            return response([
+                'success' => false,
+                'message' => 'Betting is closed in Weekend',
+                'data' => (object)[]
+            ],200);
+        }
+        
+      }
+      else
+      {
+        return response([
+            'success' => false,
+            'message' => 'Betting is closed in Weekend',
+            'data' => (object)[]
+        ],200);
+      }
+        
+    }
+    
+public function checkPlusTime(){
+
+        $currentDay = Carbon::now('Asia/Yangon')->format('d');
+        $currentMonth = Carbon::now('Asia/Yangon')->format('m');
+        $currentYear = Carbon::now('Asia/Yangon')->format('Y');
+        
+
+        $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,11,45,00, 'Asia/Yangon');
+        $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
+        $Closed = Carbon::createFromDate(2021,12,10, 'Asia/Yangon')->format('d.m.Y');
+        $UserTime = Carbon::now('Asia/Yangon');
+        
+        if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
+        {
+            return response([
+                'success' => false,
+                'message' => 'Betting is closed',
+                'data' => (object)[]
+            ],200);
+        }
+
+        if( $UserTime->gt($EveningLimit) )
+        {
+            if ( Carbon::tomorrow('Asia/Yangon')->format('d.m.Y') == $Closed || Carbon::tomorrow('Asia/Yangon')->isWeekend())
+            {
+                return response([
+                    'success' => false,
+                    'message' => 'Tomorrow is closed',
+                    'data' => (object)[]
+                ],200);
+            }
+            
+        }
+
+
+        $time = Carbon::now('Asia/Yangon')->format('d-m-Y H:i:s');
+        // $out = [
+        //     'twod' => DtwoD::all(),
+        //     'time' => $time
+        // ];
+
+        if ( !Carbon::now('Asia/Yangon')->isWeekend() )
+        {
+            if ( $UserTime->lt($NoonLimit) )
+        {   
+            $noonTime = [
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '11:45 PM',
+                'forTime' => '12:01 PM'
+            ];
+
+            $eveningTime = [
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:30 PM',
+                'forTime' => '4:31 PM'
+            ];
+
+            $avail = [
+                'bet-time' => 'Both Lottery Time Available',
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
+                'noonTime' => $noonTime,
+                'eveningTime' => $eveningTime
+            ];
+            return response([
+                'success' => true,
+                'message' => 'Available Betting Time',
+                'data' => $avail
+            ],200);
+        }
+        elseif ($UserTime->gt($NoonLimit) && $UserTime->lt($EveningLimit))
+        {
+            $eveningTime = [
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '03:30 PM',
+                'forTime' => '4:31 PM'
+            ];
+
+            $avail = [
+                'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
+                'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
+                'noonTime' => (object)[],
+                'eveningTime' => $eveningTime
+            ];
+            return response([
+                'success' => true,
+                'message' => 'Available Betting Time',
+                'data' => $avail
+            ],200);
+        }
+        elseif ($UserTime->gt($EveningLimit))
+        {
+            $noonTime = [
+                'currentTime' => Carbon::now('Asia/Yangon'),
+                'limited' => '11:45 PM',
                 'forTime' => '12:01 PM'
             ];
 

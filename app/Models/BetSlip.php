@@ -18,6 +18,8 @@ class BetSlip extends Model
         'selected-total-number',
         'win_number',
         'referral',
-        'reward'
+        'reward',
+        'created_at',
+        'updated_at'
     ];
 }

@@ -10,7 +10,7 @@ use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class ReferralController extends Controller
+class TwodReferralController extends Controller
 {   
     public function __construct()
     {
@@ -40,7 +40,8 @@ class ReferralController extends Controller
         $rewards = [];
         $referrals = [];
     
-        if ( $now == 'Friday' || $current->gt($even) )
+        // if ( $now == 'Friday' || $current->gt($even) )
+        if ( $date )
         {
             $users = NormalUser::all();
             foreach($users as $user)
@@ -150,7 +151,7 @@ class ReferralController extends Controller
                             'amount' => $result
                         ];
                     }
-                    elseif ( user['user-level'] == 'free')
+                    elseif ( $user['user-level'] == 'free')
                     {
                         $rewards[] = [
                             'user' => $user,
@@ -198,7 +199,8 @@ class ReferralController extends Controller
         $rewards = [];
         $referrals = [];
     
-        if ( $now == 'Friday' || $current->gt($even) )
+        // if ( $now == 'Friday' || $current->gt($even) )
+        if ( $date )
         {
             $users = NormalUser::all();
             foreach($users as $user)

@@ -111,7 +111,7 @@ class ReferralController extends Controller
                 }
             }
 
-            if ($count >= 11 )
+            if ($count >= 30 )
             {
                 $checkreferral->update([
                     'user-level' => 'diamond'
@@ -132,7 +132,7 @@ class ReferralController extends Controller
                 }
             }
 
-            if ($count >= 12 )
+            if ($count >= 50 )
             {
                 $checkreferral->update([
                     'user-level' => 'jade'

@@ -91,7 +91,9 @@ class UserController extends Controller
             'screen-shot' => '-',
             'status' => 'deposit',
             'transferuserId' => '-',
-            'amount' => $request['amount']
+            'amount' => $request['amount'],
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
         $user->update([
             'credits' => $user->credits + $request['amount']
@@ -122,7 +124,9 @@ class UserController extends Controller
             'screen-shot' => '-',
             'status' => 'withdraw',
             'transferuserId' => '-',
-            'amount' => $request['amount']
+            'amount' => $request['amount'],
+            'created_at' => Carbon::now('Asia/Yangon'),
+            'updated_at' => Carbon::now('Asia/Yangon')
         ]);
         $user->update([
             'credits' => $user->credits - $request['amount']

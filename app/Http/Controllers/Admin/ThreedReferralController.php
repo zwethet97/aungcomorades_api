@@ -10,7 +10,7 @@ use App\Models\NormalUser;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class ReferralController extends Controller
+class ThreedReferralController extends Controller
 {   
     public function __construct()
     {
@@ -161,7 +161,7 @@ class ReferralController extends Controller
                 }
             }
 
-            return view('admin.reward.index',[
+            return view('admin.reward.threed.index',[
                 'rewards' => $rewards,
                 'referrals' => $referrals,
                 'start' => $start,

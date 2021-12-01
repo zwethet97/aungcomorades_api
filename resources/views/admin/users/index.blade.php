@@ -216,9 +216,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-                            <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $user->id }}').submit()">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <!--    <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $user->id }}').submit()">-->
+                        <!--    <i class="fas fa-trash-alt"></i>-->
+                        <!--</button>-->
                             <form id="delete-user-form-{{ $user->id }}" action="{{ route('users.destroy', $user->id ) }}" method="POST" style="display:none">
                                 @csrf
                                 @method("DELETE")

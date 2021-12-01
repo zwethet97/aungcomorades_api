@@ -15,6 +15,8 @@ class Transaction extends Model
         'platform',
         'transferuserId',
         'status',
-        'screen-shot'
+        'screen-shot',
+        'created_at',
+        'updated_at'
     ];
 }

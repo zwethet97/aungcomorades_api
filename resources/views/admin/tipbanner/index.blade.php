@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{{ route('intro.store') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('tipbanner.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('POST')
       <div class="modal-body">
@@ -130,7 +130,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $banner->id }}').submit()">
                             <i class="fas fa-trash-alt"></i>
                         </button>
-                            <form id="delete-user-form-{{ $banner->id }}" action="{{ route('intro.destroy', $banner->id ) }}" method="POST" style="display:none">
+                            <form id="delete-user-form-{{ $banner->id }}" action="{{ route('tipbanner.destroy', $banner->id ) }}" method="POST" style="display:none">
                                 @csrf
                                 @method("DELETE")
                             </form>

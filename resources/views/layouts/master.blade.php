@@ -63,27 +63,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <br>
                       <div class="row">
                         <div class="col-lg-6">
-                          Win Amount
-                        </div>
-                        <div class="col-lg-6">
-                         <p style="text-align:right"> {{ $winAmount }}</p>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-6">
                         Commission
                         </div>
                         <div class="col-lg-6">
-                         <h6 style="text-align:right"> {{ $winAmount * 0.15 }} </h6>
+                         <h6 style="text-align:right"> {{ $NoonSlipAmount * 0.15 }} </h6>
                         </div>
                       </div>
-                      <hr>
                       <div class="row">
                         <div class="col-lg-6">
                         Total Sale
                         </div>
                         <div class="col-lg-6">
                          <h6 style="text-align:right"> {{ $NoonSlipAmount }} </h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                          Win Amount
+                        </div>
+                        <div class="col-lg-6">
+                         <p style="text-align:right"> {{ $winAmount }}</p>
                         </div>
                       </div>
                       <div class="row">
@@ -100,7 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         Total Profit
                         </div>
                         <div class="col-lg-6">
-                         <h6 style="text-align:right"> {{ $NoonSlipAmount - $payout }} </h6>
+                         <h6 style="text-align:right"> {{ $NetProfit }} </h6>
                         </div>
                       </div>
                     </div>
@@ -137,14 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <br>
                       <h2 class="lead" style="text-align:right"><b>Win No. {{ $winNumberEven }}</b></h2>
                       <br>
-                      <div class="row">
-                        <div class="col-lg-6">
-                          Win Amount
-                        </div>
-                        <div class="col-lg-6">
-                         <p style="text-align:right"> {{ $winEvenAmount }}</p>
-                        </div>
-                      </div>
+                      
                       <div class="row">
                         <div class="col-lg-6">
                         Commission
@@ -153,13 +145,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                          <h6 style="text-align:right"> {{ $EvenSlipAmount * 0.15 }} </h6>
                         </div>
                       </div>
-                      <hr>
                       <div class="row">
                         <div class="col-lg-6">
                         Total Sale
                         </div>
                         <div class="col-lg-6">
                          <h6 style="text-align:right"> {{ $EvenSlipAmount }} </h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                          Win Amount
+                        </div>
+                        <div class="col-lg-6">
+                         <p style="text-align:right"> {{ $winEvenAmount }}</p>
                         </div>
                       </div>
                       <div class="row">
@@ -176,7 +175,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         Total Profit
                         </div>
                         <div class="col-lg-6">
-                         <h6 style="text-align:right"> {{ $EvenSlipAmount - $evenPayout }} </h6>
+                         <h6 style="text-align:right"> {{ $EvenNetProfit }} </h6>
                         </div>
                       </div>
                     </div>
@@ -190,7 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       @csrf
                       @method('POST')
                     <input type="text" id="date" name="date" value="{{ $date }}" style="display:none"/>
-                    <input type="text" id="time" name="time" value="4:31 PM" style="display:none"/>
+                    <input type="text" id="time" name="time" value="4:30 PM" style="display:none"/>
                     <button type="submit" class="btn btn-sm btn-primary">
                       <i class="fas fa-user"></i> View Details
                     </button>
@@ -234,7 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         Total Profit
                         </div>
                         <div class="col-lg-6">
-                         <h6 style="text-align:right"> {{ $tmrNoonSlipAmount }} </h6>
+                         <h6 style="text-align:right"> {{ $tmrNoonSlipAmount * 0.15 }} </h6>
                         </div>
                       </div>
                     </div>
@@ -292,7 +291,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         Total Profit
                         </div>
                         <div class="col-lg-6">
-                         <h6 style="text-align:right"> {{ $tmrEvenSlipAmount }} </h6>
+                         <h6 style="text-align:right"> {{ $tmrEvenSlipAmount * 0.85 }} </h6>
                         </div>
                       </div>
                     </div>
@@ -306,7 +305,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       @csrf
                       @method('POST')
                     <input type="text" name="date" value="{{ $tdate }}" style="display:none"/>
-                    <input type="text" name="time" value="4:31 PM" style="display:none"/>
+                    <input type="text" name="time" value="4:30 PM" style="display:none"/>
                     <button type="submit" class="btn btn-sm btn-primary">
                       <i class="fas fa-user"></i> View Details
                     </button>

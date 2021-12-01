@@ -170,7 +170,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </button>
     </div>
     <div class="modal-body">
-      <img src="{{ url('/tipBanner/'.$tip['bannerImageTwo']) }}" width="100%"/>
+      <img src="{{ url('/tips/'.$tip['bannerImageTwo']) }}" width="100%"/>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

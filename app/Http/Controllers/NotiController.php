@@ -17,16 +17,16 @@ class NotiController extends Controller
         
     }
 
-    public function showbyUserId($userid)
+    public function showbyUserId($id)
     {
-        $allnoti = Noti::where('userId','all')->get();
-        $notibyuserId = Noti::where('userId',$userid)->get();
+        $allnoti = Noti::where('userId','all')->orderBy('id','DESC')->get();
+        $notibyuserId = Noti::where('userId',$id)->orderBy('id','DESC')->get();
 
         $allnoti = [
-            'annoucements' => $allnoti,
+            'annoucements' => [],
             'user noti' => $notibyuserId
         ];
-        if (!Noti::where('userId','all')->first() || !Noti::where('userId', $userid)->first() )
+        if (!Noti::where('userId', $id)->first() )
         {
         return response([
             'success' => false,

@@ -65,9 +65,9 @@ class TipController extends Controller
 
     public function createRecordTip(Request $request)
     {
-        $bannerOneName = time().'.'.$request->bannerOne->extension();
-        $bannerTwoName = time().'.'.$request->bannerTwo->extension();
-        $bannerThreeName = time().'.'.$request->bannerThree->extension();
+        $bannerOneName = time().'record1.'.$request->bannerOne->extension();
+        $bannerTwoName = time().'record2.'.$request->bannerTwo->extension();
+        $bannerThreeName = time().'record3.'.$request->bannerThree->extension();
         $request->bannerOne->move(public_path('tipBanner'), $bannerOneName);
         $request->bannerTwo->move(public_path('tipBanner'), $bannerTwoName);
         $request->bannerThree->move(public_path('tipBanner'), $bannerThreeName);
@@ -91,15 +91,16 @@ class TipController extends Controller
 
     public function createTodayTip(Request $request)
     {
-        $bannerOneName = time().'.'.$request->bannerOne->extension();
-        $bannerTwoName = time().'.'.$request->bannerTwo->extension();
-        $bannerThreeName = time().'.'.$request->bannerThree->extension();
+        $bannerOneName = time().'t1.'.$request->bannerOne->extension();
+        $bannerTwoName = time().'t2.'.$request->bannerTwo->extension();
+        $bannerThreeName = time().'t3.'.$request->bannerThree->extension();
         $request->bannerOne->move(public_path('tips'), $bannerOneName);
         $request->bannerTwo->move(public_path('tips'), $bannerTwoName);
         $request->bannerThree->move(public_path('tips'), $bannerThreeName);
 
         todayTips::insert([
             'tip_id' => $request->tipuser_id,
+            'date' => $request->date,
             'bannerImageOne' => $bannerOneName,
             'bannerImageTwo' => $bannerTwoName,
             'bannerImageThree' => $bannerThreeName,

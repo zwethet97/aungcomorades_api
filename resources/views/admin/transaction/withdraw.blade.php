@@ -70,6 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <thead>
                     <tr>
                       <th>User ID</th>
+                      <th>Name</th>
                       <th>Current Amount</th>
                       <th>Platform</th>
                       <th>Account Number</th>
@@ -81,18 +82,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @foreach($withdraws as $withdraw)
                     <tr>
                       <td>{{ $withdraw['user']['phone-number'] }}</td>
+                      <td>{{ $withdraw['user']['username'] }}</td>
                       <td>{{ $withdraw['user']['credits'] }}</td>
                       <td>{{ $withdraw['withdrawl']['platform'] }}</td>
                       <td>{{ $withdraw['withdrawl']['accountnumber'] }}</td>
                       <td>{{ $withdraw['withdrawl']['amount'] }}</td>
                         <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Withdraw</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ $withdraw['withdrawl']['id'] }}" data-whatever="@mdo">Withdraw</button>
 
-                          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal fade" id="exampleModal{{ $withdraw['withdrawl']['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">Withdraw {{ $withdraw['user']['phone-number'] }}</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel{{ $withdraw['withdrawl']['id'] }}">Withdraw {{ $withdraw['user']['phone-number'] }}</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -118,6 +120,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               </div>
                             </div>
                           </div>
+                          
+                           <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $withdraw['withdrawl']['id'] }}').submit()">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                            <form id="delete-user-form-{{ $withdraw['withdrawl']['id'] }}" action="{{ route('transaction.record.delete', $withdraw['withdrawl']['id'] ) }}" method="POST" style="display:none">
+                                @csrf
+                                @method("DELETE")
+                            </form>
 
                         </td>
                     </tr>

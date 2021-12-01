@@ -150,7 +150,7 @@ class UserAuthController extends Controller
                 return response([
                     'success' => false,
                     'message' => 'Phone Number is already registered',
-                    'data' => []
+                    'data' => (object)[]
                 ],200);
             }
         }

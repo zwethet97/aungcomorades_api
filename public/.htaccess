@@ -18,4 +18,9 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+    # Block access to dot files
+location ~ /\. {
+    deny  all;
+}
 </IfModule>
+

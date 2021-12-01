@@ -70,6 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <thead>
                     <tr>
                       <th>User ID</th>
+                      <th>Name</th>
                       <th>Current Amount</th>
                       <th>Platform</th>
                       <th>Account Number</th>
@@ -82,6 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @foreach($deposits as $deposit)
                     <tr>
                       <td>{{ $deposit['user']['phone-number'] }}</td>
+                      <td>{{ $deposit['user']['username'] }}</td>
                       <td>{{ $deposit['user']['credits'] }}</td>
                       <td>{{ $deposit['depo']['platform'] }}</td>
                       <td>{{ $deposit['depo']['accountnumber'] }}</td>
@@ -108,13 +110,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div>
                       </td>
                         <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Deposit</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ $deposit['depo']['id'] }}" data-whatever="@mdo">Deposit</button>
 
-                          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal fade" id="exampleModal{{ $deposit['depo']['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">Deposit {{ $deposit['user']['phone-number'] }}</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel{{ $deposit['depo']['id'] }}">Deposit {{ $deposit['user']['phone-number'] }}</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -140,7 +142,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               </div>
                             </div>
                           </div>
-
+                        <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault();document.getElementById('delete-user-form-{{ $deposit['depo']['id'] }}').submit()">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                            <form id="delete-user-form-{{ $deposit['depo']['id'] }}" action="{{ route('transaction.record.delete', $deposit['depo']['id'] ) }}" method="POST" style="display:none">
+                                @csrf
+                                @method("DELETE")
+                            </form>
+                        
                         </td>
                     </tr>
                     @endforeach

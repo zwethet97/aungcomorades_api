@@ -164,8 +164,9 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        Transaction::destroy($id);
+        return back()->with('message','Tip Banner Deleted');
     }
 }

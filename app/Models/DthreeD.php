@@ -16,6 +16,7 @@ class DthreeD extends Model
         'value',
         'time',
         'date',
-        'day'
+        'day',
+        'plustwod'
     ];
 }
