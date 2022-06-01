@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DthreeD;
 use App\Models\Internet;
+use App\Models\CloseDay;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -21,16 +22,25 @@ class ThreeDController extends Controller
         return response([
             'success' => true,
             'message' => 'Current Version',
-            'data' => '1'
+            'data' => '7'
         ],200);
+    }
+
+    public function getCloseDay()
+    {
+        return response([
+            'success' => true,
+            'message' => 'Close Dates',
+            'data' => CloseDay::all()
+        ],200); 
     }
     
     public function indexInternet()
     {   
         $date = Carbon::now('Asia/Yangon');
-        $date->setISODate(2021,$date->weekOfYear);
-        $start = $date->startOfWeek()->format('d.m.Y');
-        $end = $date->endOfWeek()->format('d.m.Y');
+        $date->setISODate(2022,$date->weekOfYear);
+        $start = $date->startOfWeek(Carbon::MONDAY)->format('d.m.Y');
+        $end = $date->endOfWeek(Carbon::FRIDAY)->format('d.m.Y');
 
         $monday = Internet::whereBetween('date',[$start,$end])->where('day','Monday')->get();
         $tuesday = Internet::whereBetween('date',[$start,$end])->where('day','Tuesday')->get();
@@ -40,26 +50,29 @@ class ThreeDController extends Controller
 
         $week = [
             'Monday' => [
-                'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','9:30 AM')->get(),
-                'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','2:00 PM')->get()
+                'noon' => Internet::where('date','14.02.2022')->where('day','Monday')->where('time','9:30 AM')->get(),
+                'evening' => Internet::where('date','14.02.2022')->where('day','Monday')->where('time','2:00 PM')->get()
             ],
             'Tuesday' => [
-                'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','9:30 AM')->get(),
-                'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','2:00 PM')->get()
+                'noon' => Internet::where('date','15.02.2022')->where('day','Tuesday')->where('time','9:30 AM')->get(),
+                'evening' => Internet::where('date','15.02.2022')->where('day','Tuesday')->where('time','2:00 PM')->get()
             ],
             'Wednesday' => [
-                'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','9:30 AM')->get(),
-                'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','2:00 PM')->get()
+                'noon' => Internet::where('date','16.02.2022')->where('day','Wednesday')->where('time','9:30 AM')->get(),
+                'evening' => Internet::where('date','16.02.2022')->where('day','Wednesday')->where('time','2:00 PM')->get()
             ],
             'Thursday' => [
-                'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','9:30 AM')->get(),
-                'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','2:00 PM')->get()
+                'noon' => Internet::where('date','17.02.2022')->where('day','Thursday')->where('time','9:30 AM')->get(),
+                'evening' => Internet::where('date','17.02.2022')->where('day','Thursday')->where('time','2:00 PM')->get()
             ],
             'Friday' => [
-                'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','9:30 AM')->get(),
-                'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','2:00 PM')->get()
+                'noon' => Internet::where('date','18.02.2022')->where('day','Friday')->where('time','9:30 AM')->get(),
+                'evening' => Internet::where('date','18.02.2022')->where('day','Friday')->where('time','2:00 PM')->get()
             ]
-            
+            // 'Friday' => [
+            //     'noon' => Internet::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','9:30 AM')->get(),
+            //     'evening' => Internet::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','2:00 PM')->get()
+            // ]
         ];
 
         return response([
@@ -117,10 +130,100 @@ class ThreeDController extends Controller
     
     public function index()
     {   
+        // $date = Carbon::now('Asia/Yangon');
+        // $date->setISODate(2022,$date->weekOfYear);
+        // $start = $date->startOfWeek(Carbon::MONDAY)->format('d.m.Y');
+        // $end = $date->endOfWeek(Carbon::FRIDAY)->format('d.m.Y');
+
+        // $monday = DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->get();
+        // $tuesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->get();
+        // $wednesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->get();
+        // $thursday = DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->get();
+        // $friday = DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->get();
+
+        // $week = [
+        //     'Monday' => [
+        //         'noon' => DthreeD::where('date','14.02.2022')->where('day','Monday')->where('time','12:01 PM')->get(),
+        //         'evening' => DthreeD::where('date','14.02.2022')->where('day','Monday')->where('time','4:31 PM')->get()
+        //     ],
+        //     'Tuesday' => [
+        //         'noon' => DthreeD::where('date','15.02.2022')->where('day','Tuesday')->where('time','12:01 PM')->get(),
+        //         'evening' => DthreeD::where('date','15.02.2022')->where('day','Tuesday')->where('time','4:31 PM')->get()
+        //     ],
+        //     'Wednesday' => [
+        //         'noon' => DthreeD::where('date','16.02.2022')->where('day','Wednesday')->where('time','12:01 PM')->get(),
+        //         'evening' => DthreeD::where('date','16.02.2022')->where('day','Wednesday')->where('time','4:31 PM')->get()
+        //     ],
+        //     'Thursday' => [
+        //         'noon' => DthreeD::where('date','17.02.2022')->where('day','Thursday')->where('time','12:01 PM')->get(),
+        //         'evening' => DthreeD::where('date','17.02.2022')->where('day','Thursday')->where('time','4:31 PM')->get()
+        //     ],
+        //     'Friday' => [
+        //         'noon' => DthreeD::where('date','18.02.2022')->where('day','Friday')->where('time','12:01 PM')->get(),
+        //         'evening' => DthreeD::where('date','18.02.2022')->where('day','Friday')->where('time','4:31 PM')->get()
+        //     ]
+            
+        // ];
+
+        return response([
+            'success' => true,
+            'message' => 'Current Week Results',
+            'data' => DthreeD::orderBy('id','desc')->get()
+        ],200);
+
+        // $date = Carbon::now('Asia/Yangon')->format('d-m-Y');
+        // $time = Carbon::now('Asia/Yangon')->format('g:i A');
+        // $day = Carbon::createFromFormat('d-m-Y',$date)->format('l');
+        
+        // $curl = curl_init();
+
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "https://luke.2dboss.com/api/luke/twod-result-live",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_TIMEOUT => 30000,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => array(
+        //         // Set Here Your Requesred Headers
+        //         'Content-Type: application/json',
+        //     ),
+        // ));
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+        // curl_close($curl);
+        
+        // if ($err) {
+        //     return response("cURL Error #:" . $err);
+        // } else {
+        //     $r = json_decode($response,true);
+        //     $set = $r['data']['set_430'];
+        //     $value = $r['data']['val_430'];
+        //     $modern = $r['data']['modern_200'];
+        //     $internet = $r['data']['internet_200'];
+
+        //     $set3d = substr($set,-2,2);
+        //     $value3d = substr($value,-4,-3);
+        //     $threed = $set3d.$value3d;
+
+        //     DthreeD::insert([
+        //         '3D' => $threed,
+        //         'set' => $set,
+        //         'value' => $value,
+        //         'modern' => $modern,
+        //         'internet' => $internet,
+        //         'date' => $date,
+        //         'day' => $day,
+        //         'time' => $time
+        //     ]); 
+    }
+
+    public function weekResult()
+    {   
         $date = Carbon::now('Asia/Yangon');
-        $date->setISODate(2021,$date->weekOfYear);
-        $start = $date->startOfWeek()->format('d.m.Y');
-        $end = $date->endOfWeek()->format('d.m.Y');
+        $date->setISODate(2022,$date->weekOfYear);
+        $start = $date->startOfWeek(Carbon::MONDAY)->format('d.m.Y');
+        $end = $date->endOfWeek(Carbon::FRIDAY)->format('d.m.Y');
 
         $monday = DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->get();
         $tuesday = DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->get();
@@ -130,24 +233,24 @@ class ThreeDController extends Controller
 
         $week = [
             'Monday' => [
-                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Monday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','23.05.2022')->where('day','Monday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','23.05.2022')->where('day','Monday')->where('time','4:31 PM')->get()
             ],
             'Tuesday' => [
-                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Tuesday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','24.05.2022')->where('day','Tuesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','24.05.2022')->where('day','Tuesday')->where('time','4:31 PM')->get()
             ],
             'Wednesday' => [
-                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Wednesday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','25.05.2022')->where('day','Wednesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','25.05.2022')->where('day','Wednesday')->where('time','4:31 PM')->get()
             ],
             'Thursday' => [
-                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Thursday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','26.05.2022')->where('day','Thursday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','26.05.2022')->where('day','Thursday')->where('time','4:31 PM')->get()
             ],
             'Friday' => [
-                'noon' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::whereBetween('date',[$start,$end])->where('day','Friday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','27.05.2022')->where('day','Friday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','27.05.2022')->where('day','Friday')->where('time','4:31 PM')->get()
             ]
             
         ];
@@ -267,7 +370,7 @@ public function checkTime(){
 
         $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,10,30,00, 'Asia/Yangon');
         $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
-        $Closed = Carbon::createFromDate(2021,10,22, 'Asia/Yangon')->format('d.m.Y');
+        $Closed = Carbon::createFromDate(2022,02,16, 'Asia/Yangon')->format('d.m.Y');
         $UserTime = Carbon::now('Asia/Yangon');
         
         if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
@@ -312,11 +415,11 @@ public function checkTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Both Lottery Time Available',
+                'bet-time' => '(10:30 AM) (3:45 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -332,11 +435,11 @@ public function checkTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
+                'bet-time' => '(10:30 AM) (3:45 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => (object)[],
                 'eveningTime' => $eveningTime
@@ -358,11 +461,11 @@ public function checkTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'bet-time' => '(10:30 AM) (3:45 PM)',
                 'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -402,7 +505,7 @@ public function checkInternetTime(){
 
         $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,9,00,00, 'Asia/Yangon');
         $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,13,30,00, 'Asia/Yangon');
-        $Closed = Carbon::createFromDate(2021,10,22, 'Asia/Yangon')->format('d.m.Y');
+        $Closed = Carbon::createFromDate(2022,02,16, 'Asia/Yangon')->format('d.m.Y');
         $UserTime = Carbon::now('Asia/Yangon');
         
         if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
@@ -449,7 +552,7 @@ public function checkInternetTime(){
             ];
 
             $avail = [
-                'bet-time' => 'Both Lottery Time Available',
+                'bet-time' => '(9:00 AM) (1:30 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -469,7 +572,7 @@ public function checkInternetTime(){
             ];
 
             $avail = [
-                'bet-time' => 'Betting Closed for 9:30 AM. 2:00 PM is still open',
+                'bet-time' => '(9:00 AM) (1:30 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => (object)[],
                 'eveningTime' => $eveningTime
@@ -495,7 +598,7 @@ public function checkInternetTime(){
             ];
 
             $avail = [
-                'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'bet-time' => '(9:00 AM) (1:30 PM)',
                 'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime

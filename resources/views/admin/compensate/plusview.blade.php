@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $winslip['betslip']['id'] }}</td>
                       <td>{{ $winslip['betinteger']['integer'] }}</td>
                       <td>{{ $winslip['betinteger']['amount'] }}</td>
-                      <td>{{ $winslip['betinteger']['amount'] * 80 }}</td>
+                      <td>{{ $winslip['betinteger']['amount'] * 85 }}</td>
                     </tr>
                     @endforeach
                   </tbody>
@@ -185,7 +185,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $winslipEven['betslip']['id'] }}</td>
                       <td>{{ $winslipEven['betinteger']['integer'] }}</td>
                       <td>{{ $winslipEven['betinteger']['amount'] }}</td>
-                      <td>{{ $winslipEven['betinteger']['amount'] * 80 }}</td>
+                      <td>{{ $winslipEven['betinteger']['amount'] * 85 }}</td>
                     </tr>
                     @endforeach
                   </tbody>

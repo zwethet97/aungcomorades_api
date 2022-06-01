@@ -151,7 +151,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>{{ $winslip['betslip']['id'] }}</td>
                       <td>{{ $winslip['betinteger']['integer'] }}</td>
                       <td>{{ $winslip['betinteger']['amount'] }}</td>
-                      <td>{{ $winslip['betinteger']['amount'] }}</td>
+                      <td>{{ $winslip['betinteger']['amount'] * 10 }}</td>
                     </tr>
                     @endforeach
                   </tbody>

@@ -10,8 +10,6 @@ class ThaiThreeD extends Model
     use HasFactory;
     protected $fillable = [
         'Thai3D',
-        'time',
-        'date',
-        'day'
+        'date'
     ];
 }

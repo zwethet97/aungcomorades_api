@@ -20,18 +20,11 @@ class TipsController extends Controller
      */
     public function index()
     {
-        $twodTips = Tips::all();
-        $soccerTips = SoccerTips::all();
-
-        $tips = [
-            'Banner' => TipBanner::all(),
-            '2D Tips' => $twodTips,
-            'Soccer Tips' => $soccerTips
-        ];
+        
         return response([
             'success' => true,
-            'message' => 'Date Found',
-            'data' => $tips
+            'message' => 'Tips Profile Found',
+            'data' => Tips::all()
         ],200);
 
     }
@@ -70,10 +63,9 @@ class TipsController extends Controller
     public function searchTwoDTodayTips($id)
     {   
         $today = Carbon::now('Asia/Yangon')->format('d.m.Y');
-        $dated = todayTips::where('date', 'like', '%'.$today.'%')
-                ->where('tip_id',$id)
+        $dated = todayTips::where('tip_id',$id)
                 ->get();
-        if (!todayTips::where('date', 'like', '%'.$today.'%')->first() || !todayTips::where('tip_id',$id)->first()) 
+        if (!todayTips::where('tip_id',$id)->first()) 
         {
             return response([
                 'success' => false,
@@ -142,7 +134,7 @@ class TipsController extends Controller
     {
         $history = TipRecord::where('tip_id',$id)->get();
         
-        if (!TipRecord::where('id',$id)->first()) 
+        if (!TipRecord::where('tip_id',$id)->first()) 
         {
             return response([
                 'success' => false,

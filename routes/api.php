@@ -49,9 +49,12 @@ Route::get('/3dbet-time-check', [ThreeDController::class, 'checkTime']);
 Route::get('/internetbet-time-check', [ThreeDController::class, 'checkInternetTime']);
 Route::get('/plusbet-time-check', [TwoDController::class, 'checkPlusTime']);
 Route::get('/dtwod', [TwoDController::class, 'index']);
+Route::get('/thaiwantwod', [TwoDController::class, 'checkThaiwan']);
 Route::get('/dtwod/{id}', [TwoDController::class, 'show']);
 Route::get('/dtwod/search/{date}', [TwoDController::class, 'search']);
 Route::get('/dthreed', [ThreeDController::class, 'index']);
+Route::get('/closeday', [ThreeDController::class, 'getCloseDay']);
+Route::get('/dthreed/current', [ThreeDController::class, 'weekResult']);
 Route::get('/internet', [ThreeDController::class, 'indexInternet']);
 Route::get('/dthreed/{year}/{weekno}', [ThreeDController::class, 'weeknumber']);
 Route::get('/dthreed/{id}', [ThreeDController::class, 'show']);
@@ -65,9 +68,16 @@ Route::post('/info', [BannerController::class, 'store']);
 Route::get('/check', [BetCheckController::class, 'checkBet']);
 Route::get('/betdetail/{id}', [BetSlipController::class, 'betDetail']);
 Route::get('/tips', [TipsController::class, 'index']);
-Route::get('/profit/data/', [BetSlipController::class, 'todayComIndex']);
+Route::post('/profit/auth', [BetSlipController::class, 'authCom']);
+Route::get('/profit/data/', [BetSlipController::class, 'indexTwoD']);
 Route::post('/profit/data/bet', [BetSlipController::class, 'viewBet']);
-Route::get('/twod/todaytips/{id}', [TipsController::class, 'searchTwoDTodayTips']);
+Route::get('/threedprofit/data/', [BetSlipController::class, 'indexThreeD']);
+Route::post('/threedprofit/data/bet', [BetSlipController::class, 'viewThreeDBet']);
+Route::get('/plustwodprofit/data/', [BetSlipController::class, 'indexPlusTwoD']);
+Route::post('/plustwodprofit/data/bet', [BetSlipController::class, 'viewPlusTwoDBet']);
+Route::get('/internetprofit/data/', [BetSlipController::class, 'indexInternet']);
+Route::post('/internetprofit/data/bet', [BetSlipController::class, 'viewInternetBet']);
+Route::get('/twod/profile/{id}', [TipsController::class, 'searchTwoDTodayTips']);
 Route::get('/soccer/todaytips/{id}', [TipsController::class, 'searchSoccerTodayTips']);
 Route::get('/soccer-tipshistory/{id}', [TipsController::class, 'searchSoccerTipsHistory']);
 Route::get('/twod-tipshistory/{id}', [TipsController::class, 'searchTipsHistory']);
@@ -141,6 +151,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

@@ -38,7 +38,127 @@ class CompensateController extends Controller
         ]);
 
     }
+        public function noonSlipChange(Request $request)
+    {   
+        
+        $request->validate([
+            'password' => 'required' 
+         ]);
+ 
+         $admin = User::where('id','1')->first();
+         
+         if (!Hash::check($request->password,$admin->password))
+         {
+             return back()->with('message','Password is not correct');
+         }
 
+        $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
+        $winNoThree = DthreeD::where('date',$date)->where('time','12:01 PM')->value('3D');
+        $winNoPlus = DthreeD::where('date',$date)->where('time','12:01 PM')->value('plustwod');
+        $winNoInternet = Internet::where('date',$date)->where('time','9:30 AM')->value('internet');
+        
+        
+        if ($winNoInternet)
+        {
+            $loseInternets = BetSlip::where('forDate',$date)->where('forTime','09:30 AM')->where('status','ongoing')->get();
+            
+            foreach ( $loseInternets as $loseInternet)
+            {
+                $loseInternet->update([
+                'status' => 'lose',
+                'win_number' => $winNoInternet
+                ]);
+            }
+                
+            if ($winNoThree)
+            
+            {
+                $loseThrees = BetSlip::where('forDate',$date)->where('forTime','12:01 PM')->whereIn('type',['D2D','D3D'])->where('status','ongoing')->get();
+                foreach ( $loseThrees as $loseThree)
+                    {
+                        $loseThree->update([
+                        'status' => 'lose',
+                        'win_number' => $winNoThree
+                        ]);
+                    }
+                
+                $losePluss = BetSlip::where('forDate',$date)->where('forTime','12:01 PM')->whereIn('type',['2DPLUS'])->where('status','ongoing')->get();
+                foreach ( $losePluss as $losePlus)
+                    {
+                        $losePlus->update([
+                        'status' => 'lose',
+                        'win_number' => $winNoPlus
+                        ]);
+                    }
+            }
+            
+            return back()->with('message','Updated');
+            
+        }
+        return back()->with('message','something wrong');
+    }
+    
+     public function evenSlipChange(Request $request)
+    {   
+        
+        $request->validate([
+            'password' => 'required' 
+         ]);
+ 
+         $admin = User::where('id','1')->first();
+         
+         if (!Hash::check($request->password,$admin->password))
+         {
+             return back()->with('message','Password is not correct');
+         }
+
+        $date = Carbon::now('Asia/Yangon')->format('d.m.Y');
+        $winNoThree = DthreeD::where('date',$date)->where('time','4:31 PM')->value('3D');
+        $winNoPlus = DthreeD::where('date',$date)->where('time','4:31 PM')->value('plustwod');
+        $winNoInternet = Internet::where('date',$date)->where('time','2:00 PM')->value('internet');
+        
+        
+        if ($winNoInternet)
+        {
+            $loseInternets = BetSlip::where('forDate',$date)->where('forTime','2:00 PM')->where('status','ongoing')->get();
+            
+            foreach ( $loseInternets as $loseInternet)
+            {
+                $loseInternet->update([
+                'status' => 'lose',
+                'win_number' => $winNoInternet
+                ]);
+            }
+                
+            if ($winNoThree)
+            
+            {
+                $loseThrees = BetSlip::where('forDate',$date)->where('forTime','4:30 PM')->whereIn('type',['D2D','D3D'])->where('status','ongoing')->get();
+                foreach ( $loseThrees as $loseThree)
+                    {
+                        $loseThree->update([
+                        'status' => 'lose',
+                        'win_number' => $winNoThree
+                        ]);
+                    }
+                
+                $losePluss = BetSlip::where('forDate',$date)->where('forTime','4:30 PM')->whereIn('type',['2DPLUS'])->where('status','ongoing')->get();
+                foreach ( $losePluss as $losePlus)
+                    {
+                        $losePlus->update([
+                        'status' => 'lose',
+                        'win_number' => $winNoPlus
+                        ]);
+                    }
+            }
+            
+            return back()->with('message','Updated');
+            
+        }
+        return back()->with('message','something wrong');
+    }
+    
+    
     public function winUpdate(Request $request,$id)
     {   
         $request->validate([
@@ -56,7 +176,7 @@ class CompensateController extends Controller
 
         $no->update([
             '3D' => $request->d3d,
-            'plustwod' => $request->pluswtwod,
+            'plustwod' => $request->plustwod,
             'set' => $request->set,
             'value' => $request->value
         ]);
@@ -270,7 +390,7 @@ class CompensateController extends Controller
 
             foreach( $selectIntegersEven as $selectIntegerEven )
             {
-                $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('status','ongoing')->first();
+                $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('type','D3D')->where('status','ongoing')->first();
                 if (!(empty($checkSlip)))
                 {
                 if ( $checkSlip->forDate == $date || $checkSlip->forTime == '4:30 PM')
@@ -415,7 +535,7 @@ class CompensateController extends Controller
 
             foreach( $selectIntegersEven as $selectIntegerEven )
             {
-                $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('status','ongoing')->first();
+                $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('type','D3D')->where('status','ongoing')->first();
                 if (!(empty($checkSlip)))
                 {
                 if ( $checkSlip->forDate == $date || $checkSlip->forTime == '4:30 PM')
@@ -583,7 +703,11 @@ class CompensateController extends Controller
             $winSlipEven = [];
             $selectIntegersEven = BetInteger::where('integer', $winNumberEven)->get();
             $selectIntegers = BetInteger::where('integer',$winNumberNoon)->get();
-
+            
+            
+            if ( $winNumberN )
+            
+            {
             foreach( $selectIntegers as $selectInteger )
             {
                 $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','12:01 PM')->where('forDate',$date)->where('type','D2D')->where('status','ongoing')->first();
@@ -617,7 +741,10 @@ class CompensateController extends Controller
             }
 
             }
-
+            }
+            
+            if ( $winNumberE )
+            {
             foreach( $selectIntegersEven as $selectIntegerEven )
             {
                 $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('type','D2D')->where('status','ongoing')->first();
@@ -644,6 +771,7 @@ class CompensateController extends Controller
                         'credits' => $win_user->credits + $win_amount
                     ]);
                 }
+            }
             }
             }
             return back()->with('message','D2D Compensation Success');
@@ -685,7 +813,7 @@ class CompensateController extends Controller
             {
                 foreach( $selectIntegers as $selectInteger )
                 {
-                    $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','12:01 PM')->where('forDate',$date)->where('type','D2D')->where('status','ongoing')->first();
+                    $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('type','D2D')->where('forTime','12:01 PM')->where('forDate',$date)->where('status','ongoing')->first();
                     
                     if (!(empty($checkSlip)))
 
@@ -709,7 +837,7 @@ class CompensateController extends Controller
                 foreach( $selectIntegersEven as $selectIntegerEven )
                 {
 
-                    $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('forTime','4:30 PM')->where('forDate',$date)->where('type','D2D')->where('status','ongoing')->first();
+                    $checkSlip = BetSlip::where('id',$selectIntegerEven['bet-slip-id'])->where('type','D2D')->where('forTime','4:30 PM')->where('forDate',$date)->where('status','ongoing')->first();
                     if (!(empty($checkSlip)))
                     {
                     if ( $checkSlip->forDate == $date || $checkSlip->forTime == '4:30 PM')
@@ -877,7 +1005,7 @@ class CompensateController extends Controller
 
                     $win_user = NormalUser::where('id',$checkSlip->userId)->first();
 
-                    $win_amount = $selectInteger->amount * 80;
+                    $win_amount = $selectInteger->amount * 85;
 
                     $win_user->update([
                         'credits' => $win_user->credits + $win_amount
@@ -955,7 +1083,7 @@ class CompensateController extends Controller
 
             foreach( $selectIntegers as $selectInteger )
             {
-                $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','9:30 AM')->where('forDate',$date)->where('type','INTERNET')->where('status','ongoing')->first();
+                $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','09:30 AM')->where('forDate',$date)->where('type','INTERNET')->where('status','ongoing')->first();
                 
                 if (!(empty($checkSlip)))
 
@@ -1045,7 +1173,7 @@ class CompensateController extends Controller
             {
                 foreach( $selectIntegers as $selectInteger )
                 {
-                    $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','9:30 AM')->where('forDate',$date)->where('type','INTERNET')->where('status','ongoing')->first();
+                    $checkSlip = BetSlip::where('id',$selectInteger['bet-slip-id'])->where('forTime','09:30 AM')->where('forDate',$date)->where('type','INTERNET')->where('status','ongoing')->first();
                     
                     if (!(empty($checkSlip)))
 

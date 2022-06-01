@@ -36,9 +36,11 @@ Route::prefix('controlcenter')->group(function () {
 
 // Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class,'logout']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/betdetail/threed', [App\Http\Controllers\HomeController::class, 'indexThreeD'])->name('betdetail.twodplus');
 Route::get('/betdetail/twodplus', [App\Http\Controllers\HomeController::class, 'indexTwodPlus'])->name('betdetail.twodplus');
 Route::get('/betdetail/internet', [App\Http\Controllers\HomeController::class, 'indexInternet'])->name('betdetail.internet');
 Route::post('/home',[App\Http\Controllers\HomeController::class,'viewBet'])->name('bet.view');
+Route::post('/home/threed',[App\Http\Controllers\HomeController::class,'viewThreeDBet'])->name('bet.threed');
 Route::post('/home/twodplus',[App\Http\Controllers\HomeController::class,'viewPlusBet'])->name('bet.twodplus');
 Route::post('/home/internet',[App\Http\Controllers\HomeController::class,'viewInternetBet'])->name('bet.internet');
 
@@ -60,6 +62,9 @@ Route::prefix('admin')->group(function(){
      Route::get('/transaction/withdraw',[App\Http\Controllers\Admin\TransactionController::class,'withdraw'])->name('transaction.withdraw');
      Route::post('/transaction/withdraw/update/{id}',[App\Http\Controllers\Admin\TransactionController::class,'withdrawUpdate'])->name('transaction.withdraw.update');
      Route::resource('/betslips',App\Http\Controllers\Admin\BetSlipController::class);
+     Route::put('/compensate/noon',[App\Http\Controllers\Admin\CompensateController::class,'noonSlipChange'])->name('compensate.noon');
+     Route::put('/compensate/even',[App\Http\Controllers\Admin\CompensateController::class,'evenSlipChange'])->name('compensate.even');
+     
      Route::get('/compensate',[App\Http\Controllers\Admin\CompensateController::class,'index'])->name('compensate.index');
      Route::get('/compensate/round',[App\Http\Controllers\Admin\CompensateController::class,'roundIndex'])->name('compensate.round');
      Route::post('/compensate/threed',[App\Http\Controllers\Admin\CompensateController::class,'compensateThreed'])->name('compensate.threed');

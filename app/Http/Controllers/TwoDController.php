@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DtwoD;
 use Goutte\Client;
 use App\Models\DthreeD;
-// use Symfony\Component\HttpClient\HttpClient;
-// use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -112,6 +112,26 @@ class TwoDController extends Controller
         // ],200);
     }
 
+public function checkThaiwan()
+{
+        $client = new Client();
+        $crawler = $client->request('GET','https://mis.twse.com.tw/stock/index.jsp');
+
+        $link1 = $crawler->filter('label')->eq(1)->text();
+        $link2 = $crawler->filter('label')->eq(1)->text();
+        
+        $data = [
+            'set' => $link1,
+            'value' => $link2,
+
+        ];
+        return response([
+            'success' => true,
+            'message' => 'Data Found',
+            'data' => $data
+        ],200);
+    
+}
 public function checkTime(){
 
         $currentDay = Carbon::now('Asia/Yangon')->format('d');
@@ -119,9 +139,9 @@ public function checkTime(){
         $currentYear = Carbon::now('Asia/Yangon')->format('Y');
         
 
-        $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,10,30,00, 'Asia/Yangon');
+        $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,10,00,00, 'Asia/Yangon');
         $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
-        $Closed = Carbon::createFromDate(2021,12,10, 'Asia/Yangon')->format('d.m.Y');
+        $Closed = Carbon::createFromDate(2022,02,16, 'Asia/Yangon')->format('d.m.Y');
         $UserTime = Carbon::now('Asia/Yangon');
         
         if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
@@ -159,18 +179,18 @@ public function checkTime(){
         {   
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '11:30 PM',
+                'limited' => '10:00 AM',
                 'forTime' => '12:01 PM'
             ];
 
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'limited' => '03:45 PM',
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Both Lottery Time Available',
+                'bet-time' => '(10:00 AM) (3:45 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -185,12 +205,12 @@ public function checkTime(){
         {
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'limited' => '03:45 PM',
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Betting Closed for 12:01 PM. 4:31 PM is still open',
+                'bet-time' => '(10:00 AM) (3:45 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => (object)[],
                 'eveningTime' => $eveningTime
@@ -205,18 +225,18 @@ public function checkTime(){
         {
             $noonTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '11:30 PM',
+                'limited' => '10:30 PM',
                 'forTime' => '12:01 PM'
             ];
 
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
-                'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'limited' => '03:45 PM',
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'bet-time' => '(10:00 AM) (3:45 PM)',
                 'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -257,7 +277,7 @@ public function checkPlusTime(){
 
         $NoonLimit = Carbon::create($currentYear,$currentMonth,$currentDay,11,45,00, 'Asia/Yangon');
         $EveningLimit = Carbon::create($currentYear,$currentMonth,$currentDay,15,45,00, 'Asia/Yangon');
-        $Closed = Carbon::createFromDate(2021,12,10, 'Asia/Yangon')->format('d.m.Y');
+        $Closed = Carbon::createFromDate(2022,02,16, 'Asia/Yangon')->format('d.m.Y');
         $UserTime = Carbon::now('Asia/Yangon');
         
         if ( Carbon::now('Asia/Yangon')->format('d.m.Y') == $Closed )
@@ -302,11 +322,11 @@ public function checkPlusTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Both Lottery Time Available',
+                'bet-time' => '(11:45 AM) (3:45 PM)',
                 'forDate' => Carbon::now('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime
@@ -322,7 +342,7 @@ public function checkPlusTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
@@ -348,11 +368,11 @@ public function checkPlusTime(){
             $eveningTime = [
                 'currentTime' => Carbon::now('Asia/Yangon'),
                 'limited' => '03:30 PM',
-                'forTime' => '4:31 PM'
+                'forTime' => '4:30 PM'
             ];
 
             $avail = [
-                'bet-time' => 'Today Betting is closed. Bet for Tomorrow',
+                'bet-time' => '(11:45 AM) (3:45 PM)',
                 'forDate' => Carbon::tomorrow('Asia/Yangon')->format('d.m.Y'),
                 'noonTime' => $noonTime,
                 'eveningTime' => $eveningTime

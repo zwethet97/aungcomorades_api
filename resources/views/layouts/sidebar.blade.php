@@ -44,7 +44,13 @@
               <li class="nav-item">
                 <a href="{{ url('/home') }}" class="nav-link {{ Request::is('home') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>D2D & D3D</p>
+                  <p>D2D</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/betdetail/threed') }}" class="nav-link {{ Request::is('betdetail/threed') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>D3D</p>
                 </a>
               </li>
               <li class="nav-item">

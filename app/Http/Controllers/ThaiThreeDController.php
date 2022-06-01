@@ -18,7 +18,7 @@ class ThaiThreeDController extends Controller
         return response([
             'success' => true,
             'message' => 'Data Found',
-            'data' => ThaiThreeD::all()
+            'data' => ThaiThreeD::orderBy('id','DESC')->get()
         ],200);
     }
 
@@ -32,9 +32,7 @@ class ThaiThreeDController extends Controller
     {
         $request->validate([
             'Thai3D' => 'required',
-            'time' => 'required',
-            'date' =>'required',
-            'day' =>'required'
+            'date' =>'required'
 
         ]);
         return response([
