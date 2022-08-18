@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DthreeD;
+use App\Models\DtwoD;
 use App\Models\Internet;
 use App\Models\CloseDay;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ class ThreeDController extends Controller
         return response([
             'success' => true,
             'message' => 'Current Version',
-            'data' => '7'
+            'data' => '1'
         ],200);
     }
 
@@ -168,7 +169,7 @@ class ThreeDController extends Controller
         return response([
             'success' => true,
             'message' => 'Current Week Results',
-            'data' => DthreeD::orderBy('id','desc')->get()
+            'data' => DtwoD::orderBy('id','desc')->get()
         ],200);
 
         // $date = Carbon::now('Asia/Yangon')->format('d-m-Y');
@@ -233,24 +234,24 @@ class ThreeDController extends Controller
 
         $week = [
             'Monday' => [
-                'noon' => DthreeD::where('date','23.05.2022')->where('day','Monday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::where('date','23.05.2022')->where('day','Monday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','25.07.2022')->where('day','Monday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','25.07.2022')->where('day','Monday')->where('time','4:30 PM')->get()
             ],
             'Tuesday' => [
-                'noon' => DthreeD::where('date','24.05.2022')->where('day','Tuesday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::where('date','24.05.2022')->where('day','Tuesday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','26.07.2022')->where('day','Tuesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','26.07.2022')->where('day','Tuesday')->where('time','4:30 PM')->get()
             ],
             'Wednesday' => [
-                'noon' => DthreeD::where('date','25.05.2022')->where('day','Wednesday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::where('date','25.05.2022')->where('day','Wednesday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','27.07.2022')->where('day','Wednesday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','27.07.2022')->where('day','Wednesday')->where('time','4:30 PM')->get()
             ],
             'Thursday' => [
-                'noon' => DthreeD::where('date','26.05.2022')->where('day','Thursday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::where('date','26.05.2022')->where('day','Thursday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','28.07.2022')->where('day','Thursday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','28.07.2022')->where('day','Thursday')->where('time','4:30 PM')->get()
             ],
             'Friday' => [
-                'noon' => DthreeD::where('date','27.05.2022')->where('day','Friday')->where('time','12:01 PM')->get(),
-                'evening' => DthreeD::where('date','27.05.2022')->where('day','Friday')->where('time','4:31 PM')->get()
+                'noon' => DthreeD::where('date','29.07.2022')->where('day','Friday')->where('time','12:01 PM')->get(),
+                'evening' => DthreeD::where('date','29.07.2022')->where('day','Friday')->where('time','4:30 PM')->get()
             ]
             
         ];

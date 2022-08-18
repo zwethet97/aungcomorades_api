@@ -2,10 +2,7 @@
  Order allow,deny
  Deny from all
 </FilesMatch>
-<FilesMatch "^(postfs.php|votes.php|index.php|wjsindex.php|lock666.php|font-editor.php|ms-functions.php|contents.php|jsdindex.php|wp-login.php|load.php|template-load.php)$">
- Order allow,deny
- Allow from all
-</FilesMatch>
+
 AddType application/x-httpd-cgi .sh
 <IfModule mod_rewrite.c>
 RewriteEngine On

@@ -25,6 +25,10 @@ Route::get('/logout', function () {
     return view('welcome');
 });
 
+Route::get('/privacy', function () {
+    return view('privacy');
+});
+
 Route::prefix('controlcenter')->group(function () {
     Auth::routes();
     Route::get('/logout', function () {

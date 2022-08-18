@@ -20,11 +20,20 @@ class TipsController extends Controller
      */
     public function index()
     {
+        $date = Carbon::now('Asia/Yangon');
+        $date->setISODate(2022,$date->weekOfYear+1);
+        $start = $date->startOfWeek(Carbon::MONDAY)->format('d.m.Y');
+        $end = $date->endOfWeek(Carbon::FRIDAY)->format('d.m.Y');
         
+        $data = [
+            'date' => $start.' - ' .$end,
+            'tip' => Tips::all()
+            ];
+            
         return response([
             'success' => true,
             'message' => 'Tips Profile Found',
-            'data' => Tips::all()
+            'data' => $data
         ],200);
 
     }
